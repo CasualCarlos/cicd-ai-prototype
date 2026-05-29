@@ -1,0 +1,155 @@
+# =============================================================================
+# Baseline CI Pipeline — Config A (geen AI-testselectie)
+#
+# Dit is de referentie-pipeline die ALLE tests uitvoert bij elke push of PR.
+# Wordt gebruikt als meetpunt voor vergelijking met de AI-geoptimaliseerde
+# pipeline (ai-optimized.yml).
+#
+# Meetpunten die worden bijgehouden:
+#   - Totale uitvoeringstijd (START_TIME / END_TIME)
+#   - Testresultaten (JUnit XML → artifacts)
+#   - SAST bevindingen (bandit JSON → artifacts)
+# =============================================================================
+
+name: Baseline CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+# Minimale rechten conform security best practices
+# pull-requests: write is nodig voor het plaatsen van faalcommentaren
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  test:
+    name: Run all tests (baseline)
+    runs-on: ubuntu-latest
+
+    steps:
+      # ------------------------------------------------------------------
+      # 1. Tijdstempel vastleggen vóór de pipeline start
+      # ------------------------------------------------------------------
+      - name: Record start time
+        id: start
+        run: echo "START_TIME=$(date +%s)" >> "$GITHUB_ENV"
+
+      # ------------------------------------------------------------------
+      # 2. Broncode ophalen
+      # ------------------------------------------------------------------
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ------------------------------------------------------------------
+      # 3. Python 3.11 instellen + pip-cache voor snellere runs
+      # ------------------------------------------------------------------
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # ------------------------------------------------------------------
+      # 4. Afhankelijkheden installeren
+      # ------------------------------------------------------------------
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # ------------------------------------------------------------------
+      # 5. Ensure results directory exists
+      # ------------------------------------------------------------------
+      - name: Create results directory
+        run: mkdir -p results
+
+      # ------------------------------------------------------------------
+      # 6. SAST — statische beveiligingsanalyse met bandit
+      #    continue-on-error: true zodat de pipeline niet stopt bij waarschuwingen;
+      #    het rapport wordt altijd geüpload als artifact voor inspectie.
+      # ------------------------------------------------------------------
+      - name: Run Bandit (SAST)
+        continue-on-error: true
+        run: bandit -r app/ -f json -o results/bandit-report.json
+
+      # ------------------------------------------------------------------
+      # 7. Alle tests uitvoeren
+      #    --tb=short   : korte foutmeldingen
+      #    --junitxml   : masjienelesbaar rapport voor dashboards
+      #    -v           : verbose zodat elke testnaam zichtbaar is in de logs
+      # ------------------------------------------------------------------
+      - name: Run all tests
+        run: pytest tests/ --tb=short --junitxml=results/test-results.xml -v
+
+      # ------------------------------------------------------------------
+      # 8. Generiek faalcommentaar op PR plaatsen (baseline — geen AI)
+      #
+      #     Verschil met de AI-geoptimaliseerde pipeline: hier wordt GEEN
+      #     OpenAI-analyse uitgevoerd. In plaats daarvan plaatsen we een
+      #     eenvoudig commentaar zodat de ontwikkelaar weet dat er tests
+      #     zijn mislukt en de logs moet bekijken.
+      #
+      #     Dit is het vergelijkingspunt (Config A) ten opzichte van de
+      #     AI-diagnose (Config B) voor de onderzoeksmeting.
+      #
+      #     continue-on-error: true — de pipeline blokkeert nooit door dit
+      # ------------------------------------------------------------------
+      - name: Post generic failure comment on PR
+        if: failure()
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Haal het PR-nummer op uit het event-bestand (alleen bij pull_request events)
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -n "$GITHUB_EVENT_PATH" ]; then
+            PR_NUMBER=$(python -c "
+          import json, sys
+          with open('$GITHUB_EVENT_PATH') as f:
+              d = json.load(f)
+          pr = d.get('pull_request', {}).get('number')
+          if pr:
+              print(pr)
+          ")
+            if [ -n "$PR_NUMBER" ]; then
+              BODY="## ❌ Tests mislukt\n\nTests zijn mislukt. Controleer de workflow-logs voor details."
+              curl -s -X POST \
+                -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" \
+                -d "{\"body\": \"## ❌ Tests mislukt\\n\\nTests zijn mislukt. Controleer de workflow-logs voor details.\"}"
+              echo "Faalcommentaar geplaatst op PR #${PR_NUMBER}."
+            else
+              echo "Geen PR-context — faalcommentaar alleen naar stdout."
+              echo "## ❌ Tests mislukt — controleer de workflow-logs voor details."
+            fi
+          else
+            echo "Geen pull_request event — faalcommentaar alleen naar stdout."
+            echo "## ❌ Tests mislukt — controleer de workflow-logs voor details."
+          fi
+
+      # ------------------------------------------------------------------
+      # 9. Tijdstempel vastleggen ná de pipeline + duur berekenen
+      # ------------------------------------------------------------------
+      - name: Record end time and calculate duration
+        if: always()
+        run: |
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
+          echo "Pipeline duration: ${DURATION} seconds"
+          # Schrijf ook naar CSV voor geautomatiseerde verwerking
+          mkdir -p results
+          echo "$(date -u +"%Y-%m-%dT%H:%M:%SZ"),baseline,${DURATION}" >> results/timing.csv
+
+      # ------------------------------------------------------------------
+      # 10. Resultaten uploaden als artifact (bewaard gedurende 30 dagen)
+      # ------------------------------------------------------------------
+      - name: Upload results artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseline-results-${{ github.run_number }}
+          path: results/
+          retention-days: 30

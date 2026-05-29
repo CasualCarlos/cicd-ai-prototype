@@ -1,0 +1,24 @@
+{
+  "app/routes/users.py": [
+    "tests/unit/test_user_service.py",
+    "tests/integration/test_users_api.py"
+  ],
+  "app/routes/products.py": [
+    "tests/unit/test_product_service.py",
+    "tests/integration/test_products_api.py"
+  ],
+  "app/services/user_service.py": [
+    "tests/unit/test_user_service.py"
+  ],
+  "app/services/product_service.py": [
+    "tests/unit/test_product_service.py"
+  ],
+  "app/database.py": [
+    "tests/integration/test_users_api.py",
+    "tests/integration/test_products_api.py"
+  ],
+  "app/main.py": [
+    "tests/integration/test_users_api.py",
+    "tests/integration/test_products_api.py"
+  ]
+}
