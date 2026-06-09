@@ -1,5 +1,7 @@
 """Flask application factory. (v2.0)"""
 
+import os
+
 from flask import Flask, jsonify
 
 from app.database import close_db, init_db
@@ -17,7 +19,7 @@ def create_app(config=None):
     app = Flask(__name__)
 
     # Default configuration
-    app.config.setdefault("DATABASE", "app.db")
+    app.config.setdefault("DATABASE", os.environ.get("DATABASE", "app.db"))
     app.config.setdefault("TESTING", False)
 
     if config:

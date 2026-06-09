@@ -29,11 +29,15 @@ RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 COPY app/ ./app/
 COPY requirements.txt .
 
+# Create writable directory for SQLite database
+RUN mkdir -p /app/data && chown appuser:appgroup /app/data
+
 USER appuser
 
 EXPOSE 5000
 
 ENV FLASK_APP=app.main
 ENV FLASK_RUN_HOST=0.0.0.0
+ENV DATABASE=/app/data/app.db
 
 CMD ["python", "-m", "flask", "run"]
