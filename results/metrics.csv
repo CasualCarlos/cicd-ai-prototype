@@ -1,0 +1,16 @@
+timestamp,workflow,run_number,duration_seconds,conclusion,branch,commit_sha
+2026-06-02T20:55:32Z,baseline,1,18,failure,main,0059e86
+2026-06-02T20:57:24Z,baseline,2,21,success,main,b08c3ca
+2026-06-02T20:58:57Z,baseline,3,19,success,main,7e89fe4
+2026-06-02T21:02:39Z,baseline,4,18,success,main,e306d3c
+2026-06-09T19:25:03Z,baseline,5,17,success,main,2a72835
+2026-06-09T19:27:39Z,ai-optimized,1,23,failure,feature/demo-ai-pipeline,54d945e
+2026-06-09T19:38:40Z,ai-optimized,2,22,failure,feature/demo-ai-pipeline,9303cb5
+2026-06-09T19:38:48Z,baseline,6,20,failure,main,9303cb5
+2026-06-09T19:40:05Z,baseline,7,16,success,main,a773919
+2026-06-09T19:48:37Z,baseline,8,21,success,main,8cf0413
+2026-06-09T19:48:42Z,baseline,9,17,success,main,36fb6e8
+2026-06-09T19:50:51Z,baseline,10,16,success,main,8028b1a
+2026-06-09T19:50:59Z,ai-optimized,3,18,success,scenario/a-bugfix,8028b1a
+2026-06-09T19:51:02Z,ai-optimized,4,20,success,scenario/b-feature,8028b1a
+2026-06-09T19:51:03Z,ai-optimized,5,23,failure,scenario/c-breaking,f15a767
