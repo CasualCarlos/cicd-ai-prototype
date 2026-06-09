@@ -1,12 +1,11 @@
 # AI-Geoptimaliseerde CI/CD Pipeline
 
-<!-- Badges: vervang door je eigen GitHub username na push -->
-<!-- ![Baseline CI](https://github.com/<username>/cicd-ai-prototype/actions/workflows/baseline.yml/badge.svg) -->
-<!-- ![AI-geoptimaliseerde CI](https://github.com/<username>/cicd-ai-prototype/actions/workflows/ai-optimized.yml/badge.svg) -->
+![Baseline CI](https://github.com/CasualCarlos/cicd-ai-prototype/actions/workflows/baseline.yml/badge.svg)
+![AI-Optimized CI](https://github.com/CasualCarlos/cicd-ai-prototype/actions/workflows/ai-optimized.yml/badge.svg)
 
-Een prototype dat een CI/CD-pipeline uitbreidt met twee AI-componenten: **predictive test selection** (alleen relevante tests draaien op basis van gewijzigde bestanden) en **AI-gestuurde foutdiagnose** (automatische root-cause analyse bij falende builds als PR-commentaar). Gebouwd als afstudeerproject voor HBO-ICT Secure Software Engineering, Toets 2.
+Een prototype dat een CI/CD-pipeline uitbreidt met twee AI-componenten: **predictive test selection** (alleen relevante tests draaien op basis van gewijzigde bestanden) en **AI-gestuurde foutdiagnose** (automatische root-cause analyse bij falende builds als PR-commentaar). Gebouwd voor HBO-ICT Secure Software Engineering, Toets 2.
 
-**Resultaat**: gemiddeld 35% kortere push-to-deploy doorlooptijd; time-to-understand van faallogboeken van 8–12 minuten naar ~30 seconden.
+**Resultaat**: AI-testselectie reduceert het aantal uitgevoerde tests met 48–74% bij gerichte wijzigingen; de log-analyser verkort de foutdiagnosetijd van 5–10 minuten naar ~30 seconden.
 
 ---
 
@@ -35,7 +34,7 @@ Een prototype dat een CI/CD-pipeline uitbreidt met twee AI-componenten: **predic
 ### 1. Repository klonen
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/cicd-ai-prototype.git
+git clone https://github.com/CasualCarlos/cicd-ai-prototype.git
 cd cicd-ai-prototype
 ```
 
@@ -94,7 +93,7 @@ Het prototype bevat twee pipeline-configuraties die naast elkaar meten:
 | Pipeline | Bestand | Triggert op | Beschrijving |
 |----------|---------|-------------|--------------|
 | **Baseline** | `.github/workflows/baseline.yml` | Push naar `main`, alle PRs | Altijd alle 31 tests |
-| **AI-geoptimaliseerd** | `.github/workflows/ai-optimized.yml` | Feature-branches (`feature/**`, `fix/**`), PRs | AI-testselectie + diagnose bij failures |
+| **AI-geoptimaliseerd** | `.github/workflows/ai-optimized.yml` | Feature-branches (`feature/**`, `fix/**`, `scenario/**`), PRs | AI-testselectie + diagnose bij failures |
 
 ### Meting uitvoeren
 
@@ -107,7 +106,7 @@ Het prototype bevat twee pipeline-configuraties die naast elkaar meten:
    git push origin feature/test-selectie-demo
    ```
 2. Bekijk de GitHub Actions UI: beide pipelines draaien; vergelijk de doorlooptijden
-3. Metriekdata wordt opgeslagen in `results/metrics.csv` en `results/releases.csv`
+3. Metriekdata ophalen na afloop: `python3 scripts/fetch_metrics.py`
 
 ---
 
@@ -124,9 +123,9 @@ cicd-ai-prototype/
 │   ├── log_analyzer.py      # Analyseert pytest-failures met GPT-4o-mini
 │   └── coverage_map.json    # Bestand-naar-test mapping (handmatig of gegenereerd)
 │
-├── app/                     # FastAPI REST-applicatie
-│   ├── main.py              # App-entry en routing
-│   ├── models.py            # SQLAlchemy modellen
+├── app/                     # Flask REST-applicatie
+│   ├── main.py              # App factory en routing
+│   ├── database.py          # SQLite database-setup
 │   ├── routes/              # Endpoint-definities (users, products)
 │   └── services/            # Businesslogica (user_service, product_service)
 │
@@ -135,14 +134,14 @@ cicd-ai-prototype/
 │   └── integration/         # 15 integratie-tests
 │
 ├── results/                 # Metriekdata en gegenereerde rapporten
-│   ├── metrics.csv          # Testtijden per scenario
-│   ├── releases.csv         # Push-to-deploy per release
+│   ├── metrics.csv          # Echte GitHub Actions run-data
 │   └── ai-diagnosis-example.md  # Voorbeeldoutput log-analyser
 │
 ├── scripts/                 # Hulpscripts
-│   ├── generate_coverage_map.py  # Genereert coverage_map.json
-│   ├── collect_metrics.py        # Vergelijkt coverage-rapporten
-│   └── post_pr_comment.py        # Plaatst AI-diagnose als PR-commentaar
+│   ├── fetch_metrics.py         # Haalt echte run-data op via GitHub API
+│   ├── generate_coverage_map.py # Genereert coverage_map.json
+│   ├── collect_metrics.sh       # Metriekverzamelaar voor CI
+│   └── post_pr_comment.py       # Plaatst AI-diagnose als PR-commentaar
 │
 ├── docker/                  # Container-configuratie
 ├── docs/                    # Projectdocumentatie

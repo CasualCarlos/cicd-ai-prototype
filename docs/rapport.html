@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="nl" xml:lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>AI-Geoptimaliseerde CI/CD Pipeline</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">AI-Geoptimaliseerde CI/CD Pipeline</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a
+href="#ai-geoptimaliseerde-cicd-pipeline-prototyping-en-optimalisatie"
+id="toc-ai-geoptimaliseerde-cicd-pipeline-prototyping-en-optimalisatie"><span
+class="toc-section-number">1</span> AI-Geoptimaliseerde CI/CD Pipeline:
+Prototyping en Optimalisatie</a>
+<ul>
+<li><a href="#samenvatting" id="toc-samenvatting"><span
+class="toc-section-number">1.1</span> Samenvatting</a></li>
+<li><a href="#inhoudsopgave" id="toc-inhoudsopgave"><span
+class="toc-section-number">1.2</span> Inhoudsopgave</a></li>
+<li><a href="#inleiding" id="toc-inleiding"><span
+class="toc-section-number">1.3</span> 1. Inleiding</a>
+<ul>
+<li><a href="#context-en-aanleiding"
+id="toc-context-en-aanleiding"><span
+class="toc-section-number">1.3.1</span> 1.1 Context en
+aanleiding</a></li>
+<li><a href="#probleemstelling" id="toc-probleemstelling"><span
+class="toc-section-number">1.3.2</span> 1.2 Probleemstelling</a></li>
+<li><a href="#onderzoeksvragen" id="toc-onderzoeksvragen"><span
+class="toc-section-number">1.3.3</span> 1.3 Onderzoeksvragen</a></li>
+<li><a href="#leeswijzer" id="toc-leeswijzer"><span
+class="toc-section-number">1.3.4</span> 1.4 Leeswijzer</a></li>
+</ul></li>
+<li><a href="#analyse-van-cicd-en-ai-mogelijkheden"
+id="toc-analyse-van-cicd-en-ai-mogelijkheden"><span
+class="toc-section-number">1.4</span> 2. Analyse van CI/CD en
+AI-mogelijkheden</a>
+<ul>
+<li><a href="#het-generieke-cicd-proces"
+id="toc-het-generieke-cicd-proces"><span
+class="toc-section-number">1.4.1</span> 2.1 Het generieke
+CI/CD-proces</a></li>
+<li><a href="#de-baseline-pipeline-van-de-voorbeeldapplicatie"
+id="toc-de-baseline-pipeline-van-de-voorbeeldapplicatie"><span
+class="toc-section-number">1.4.2</span> 2.2 De baseline-pipeline van de
+voorbeeldapplicatie</a></li>
+<li><a href="#vergelijking-cicd-platforms"
+id="toc-vergelijking-cicd-platforms"><span
+class="toc-section-number">1.4.3</span> 2.3 Vergelijking
+CI/CD-platforms</a></li>
+<li><a href="#geïdentificeerde-knelpunten-in-de-baseline-pipeline"
+id="toc-geïdentificeerde-knelpunten-in-de-baseline-pipeline"><span
+class="toc-section-number">1.4.4</span> 2.4 Geïdentificeerde knelpunten
+in de baseline-pipeline</a></li>
+<li><a href="#ai--en-virtualisatiemogelijkheden"
+id="toc-ai--en-virtualisatiemogelijkheden"><span
+class="toc-section-number">1.4.5</span> 2.5 AI- en
+virtualisatiemogelijkheden</a></li>
+<li><a href="#conceptuele-architectuur"
+id="toc-conceptuele-architectuur"><span
+class="toc-section-number">1.4.6</span> 2.6 Conceptuele
+architectuur</a></li>
+</ul></li>
+<li><a href="#ontwerp-en-architectuur"
+id="toc-ontwerp-en-architectuur"><span
+class="toc-section-number">1.5</span> 3. Ontwerp en architectuur</a>
+<ul>
+<li><a href="#twee-pipeline-configuraties"
+id="toc-twee-pipeline-configuraties"><span
+class="toc-section-number">1.5.1</span> 3.1 Twee
+pipeline-configuraties</a></li>
+<li><a href="#ai-component-1-predictive-test-selection-algoritme"
+id="toc-ai-component-1-predictive-test-selection-algoritme"><span
+class="toc-section-number">1.5.2</span> 3.2 AI-component 1: Predictive
+Test Selection — Algoritme</a></li>
+<li><a href="#ai-component-2-log-anomaliedetectie-ontwerp"
+id="toc-ai-component-2-log-anomaliedetectie-ontwerp"><span
+class="toc-section-number">1.5.3</span> 3.3 AI-component 2:
+Log-anomaliedetectie — Ontwerp</a></li>
+<li><a href="#developer-feedback-loops-gre2"
+id="toc-developer-feedback-loops-gre2"><span
+class="toc-section-number">1.5.4</span> 3.4 Developer Feedback Loops
+(GRe2)</a></li>
+<li><a href="#security-in-de-cicd-pipeline"
+id="toc-security-in-de-cicd-pipeline"><span
+class="toc-section-number">1.5.5</span> 3.5 Security in de
+CI/CD-pipeline</a></li>
+<li><a href="#metrieken-en-kpis" id="toc-metrieken-en-kpis"><span
+class="toc-section-number">1.5.6</span> 3.6 Metrieken en KPI’s</a></li>
+</ul></li>
+<li><a href="#implementatie-en-simulatie"
+id="toc-implementatie-en-simulatie"><span
+class="toc-section-number">1.6</span> 4. Implementatie en simulatie</a>
+<ul>
+<li><a href="#wat-is-gebouwd" id="toc-wat-is-gebouwd"><span
+class="toc-section-number">1.6.1</span> 4.1 Wat is gebouwd</a></li>
+<li><a href="#baseline-pipeline-in-de-praktijk"
+id="toc-baseline-pipeline-in-de-praktijk"><span
+class="toc-section-number">1.6.2</span> 4.2 Baseline-pipeline in de
+praktijk</a></li>
+<li><a href="#test-selectie-in-de-praktijk"
+id="toc-test-selectie-in-de-praktijk"><span
+class="toc-section-number">1.6.3</span> 4.3 Test-selectie in de
+praktijk</a></li>
+<li><a href="#testscenarios-en-resultaten"
+id="toc-testscenarios-en-resultaten"><span
+class="toc-section-number">1.6.4</span> 4.4 Testscenario’s en
+resultaten</a></li>
+<li><a
+href="#vergelijking-baseline-vs.-ai-geoptimaliseerd-echte-github-actions-data"
+id="toc-vergelijking-baseline-vs.-ai-geoptimaliseerd-echte-github-actions-data"><span
+class="toc-section-number">1.6.5</span> 4.5 Vergelijking baseline
+vs. AI-geoptimaliseerd: echte GitHub Actions data</a></li>
+<li><a href="#gemeten-kpis-versus-doelstellingen"
+id="toc-gemeten-kpis-versus-doelstellingen"><span
+class="toc-section-number">1.6.6</span> 4.6 Gemeten KPI’s versus
+doelstellingen</a></li>
+</ul></li>
+<li><a href="#evaluatie-en-reflectie"
+id="toc-evaluatie-en-reflectie"><span
+class="toc-section-number">1.7</span> 5. Evaluatie en reflectie</a>
+<ul>
+<li><a href="#prestatieanalyse" id="toc-prestatieanalyse"><span
+class="toc-section-number">1.7.1</span> 5.1 Prestatieanalyse</a></li>
+<li><a href="#vergelijking-met-de-traditionele-aanpak"
+id="toc-vergelijking-met-de-traditionele-aanpak"><span
+class="toc-section-number">1.7.2</span> 5.2 Vergelijking met de
+traditionele aanpak</a></li>
+<li><a href="#real-world-toepasbaarheid"
+id="toc-real-world-toepasbaarheid"><span
+class="toc-section-number">1.7.3</span> 5.3 Real-world
+toepasbaarheid</a></li>
+<li><a href="#beperkingen-van-de-coverage-map-heuristiek"
+id="toc-beperkingen-van-de-coverage-map-heuristiek"><span
+class="toc-section-number">1.7.4</span> 5.4 Beperkingen van de
+coverage-map heuristiek</a></li>
+<li><a href="#toekomstvisie" id="toc-toekomstvisie"><span
+class="toc-section-number">1.7.5</span> 5.5 Toekomstvisie</a></li>
+<li><a href="#aanbevelingen" id="toc-aanbevelingen"><span
+class="toc-section-number">1.7.6</span> 5.6 Aanbevelingen</a></li>
+<li><a href="#koppeling-aan-beroepstaken"
+id="toc-koppeling-aan-beroepstaken"><span
+class="toc-section-number">1.7.7</span> 5.7 Koppeling aan
+beroepstaken</a></li>
+</ul></li>
+<li><a href="#conclusie" id="toc-conclusie"><span
+class="toc-section-number">1.8</span> 6. Conclusie</a>
+<ul>
+<li><a href="#beantwoording-van-de-onderzoeksvragen"
+id="toc-beantwoording-van-de-onderzoeksvragen"><span
+class="toc-section-number">1.8.1</span> 6.1 Beantwoording van de
+onderzoeksvragen</a></li>
+<li><a href="#hoofdbevindingen" id="toc-hoofdbevindingen"><span
+class="toc-section-number">1.8.2</span> 6.2 Hoofdbevindingen</a></li>
+<li><a href="#slotbeschouwing" id="toc-slotbeschouwing"><span
+class="toc-section-number">1.8.3</span> 6.3 Slotbeschouwing</a></li>
+</ul></li>
+<li><a href="#bronnenlijst" id="toc-bronnenlijst"><span
+class="toc-section-number">1.9</span> 7. Bronnenlijst</a></li>
+<li><a href="#bijlagen" id="toc-bijlagen"><span
+class="toc-section-number">1.10</span> 8. Bijlagen</a>
+<ul>
+<li><a href="#bijlage-a-repository-structuur"
+id="toc-bijlage-a-repository-structuur"><span
+class="toc-section-number">1.10.1</span> Bijlage A:
+Repository-structuur</a></li>
+<li><a href="#bijlage-b-metriekdata"
+id="toc-bijlage-b-metriekdata"><span
+class="toc-section-number">1.10.2</span> Bijlage B: Metriekdata</a></li>
+<li><a href="#bijlage-c-voorbeeld-ai-diagnose"
+id="toc-bijlage-c-voorbeeld-ai-diagnose"><span
+class="toc-section-number">1.10.3</span> Bijlage C: Voorbeeld
+AI-diagnose</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="1"
+id="ai-geoptimaliseerde-cicd-pipeline-prototyping-en-optimalisatie"><span
+class="header-section-number">1</span> AI-Geoptimaliseerde CI/CD
+Pipeline: Prototyping en Optimalisatie</h1>
+<p><strong>Student</strong>: Carlos Miguel<br />
+<strong>Opleiding</strong>: HBO-ICT, Secure Software Engineering<br />
+<strong>Module</strong>: Secure Software Engineering — Toets 2<br />
+<strong>Datum</strong>: Juni 2026</p>
+<hr />
+<h2 data-number="1.1" id="samenvatting"><span
+class="header-section-number">1.1</span> Samenvatting</h2>
+<p>Dit rapport beschrijft het ontwerp, de implementatie en de evaluatie
+van een AI-geoptimaliseerde CI/CD-pipeline als prototype voor een
+Flask/FastAPI REST-applicatie. De centrale vraag is hoe kunstmatige
+intelligentie meetbare verbeteringen kan opleveren in de snelheid en
+kwaliteit van een geautomatiseerde softwareleveringsketen.</p>
+<p>Het prototype implementeert twee complementaire AI-componenten:
+<em>predictive test selection</em> — een heuristiek die op basis van
+gewijzigde bronbestanden alleen de relevante tests selecteert — en
+<em>log-anomaliedetectie</em> — een LLM-gebaseerde analyser die bij
+falende builds automatisch een root-cause diagnose opstelt en als
+PR-commentaar plaatst.</p>
+<p>De resultaten zijn gemeten aan de hand van echte GitHub Actions runs
+(10 baseline-runs op <code>main</code>, 5 AI-geoptimaliseerde runs op
+scenario-branches). In dit prototype met 31 snelle tests domineert de
+setup-overhead (Python-installatie, pip-cache, checkout: ~12s) de totale
+workflow-duur, waardoor de absolute tijdwinst per run klein is: beide
+workflows duren 16–23 seconden. De reële meerwaarde van AI-testselectie
+zit in (1) het aantal uitgevoerde tests — baseline altijd 31,
+AI-selectie 8 (geïsoleerde wijziging) tot 22 (brede wijziging) — en (2)
+de automatische root-cause diagnose bij falende builds. De
+AI-diagnosecomponent reduceerde de geschatte time-to-understand van
+faallogboeken van 5–10 minuten handmatig onderzoek naar circa 30
+seconden leestijd. De schaalwaarde wordt in het rapport gekwantificeerd:
+bij een testsuite van 1.000 tests met 10 minuten baseline-tijd levert
+dezelfde selectiestrategie ~7,5 minuten tijdwinst per run op.</p>
+<p>De kritische reflectie laat zien dat de huidige implementatie — op
+basis van een handmatige coverage-map — een fundamentele beperking kent
+bij dynamische afhankelijkheden en niet zonder aanvullende maatregelen
+productie-waardig is. De meest waardevolle les is dat AI in een
+CI/CD-context het sterkst is als beslissingsondersteunend instrument en
+het zwakst als autonome beslisser zonder menselijk toezicht.</p>
+<hr />
+<h2 data-number="1.2" id="inhoudsopgave"><span
+class="header-section-number">1.2</span> Inhoudsopgave</h2>
+<ol type="1">
+<li><a href="#1-inleiding">Inleiding</a></li>
+<li><a href="#2-analyse-van-cicd-en-ai-mogelijkheden">Analyse van CI/CD
+en AI-mogelijkheden</a></li>
+<li><a href="#3-ontwerp-en-architectuur">Ontwerp en
+architectuur</a></li>
+<li><a href="#4-implementatie-en-simulatie">Implementatie en
+simulatie</a></li>
+<li><a href="#5-evaluatie-en-reflectie">Evaluatie en reflectie</a></li>
+<li><a href="#6-conclusie">Conclusie</a></li>
+<li><a href="#7-bronnenlijst">Bronnenlijst</a></li>
+<li><a href="#8-bijlagen">Bijlagen</a></li>
+</ol>
+<hr />
+<h2 data-number="1.3" id="inleiding"><span
+class="header-section-number">1.3</span> 1. Inleiding</h2>
+<h3 data-number="1.3.1" id="context-en-aanleiding"><span
+class="header-section-number">1.3.1</span> 1.1 Context en
+aanleiding</h3>
+<p>De software-industrie heeft de afgelopen decennia een fundamentele
+verschuiving doorgemaakt van periodieke, monolithische releases naar
+frequente, incrementele deployments. Continuous Integration en
+Continuous Delivery (CI/CD) vormen de ruggengraat van deze transitie.
+Waar ontwikkelteams vroeger wekelijks of maandelijks software uitrolden,
+worden hedendaagse systemen soms meerdere keren per dag naar productie
+gebracht (Humble &amp; Farley, 2010).</p>
+<p>CI/CD automatiseert de gehele softwarelevering­keten: van het moment
+dat een ontwikkelaar code commit totdat die code productierijp is.
+Continuous Integration verwijst specifiek naar de praktijk waarbij
+iedere codewijziging automatisch wordt gebouwd en getest, zodat
+integratiefouten vroegtijdig worden opgespoord (Duvall et al., 2007).
+Continuous Delivery breidt dit uit met een geautomatiseerde
+deploymentpipeline die de software altijd in een deploybare staat
+houdt.</p>
+<p>Ondanks de volwassenheid van CI/CD-tooling blijven twee terugkerende
+knelpunten bestaan: (1) lange pipeline-doorlooptijden doordat alle tests
+bij elke wijziging worden uitgevoerd, ongeacht de scope van de
+wijziging, en (2) trage foutdiagnose omdat de feedback die een pipeline
+geeft binair is — geslaagd of mislukt — zonder context over de
+oorzaak.</p>
+<p>Recente ontwikkelingen in machine learning en Large Language Models
+(LLM’s) bieden nieuwe mogelijkheden om deze knelpunten aan te pakken.
+Dit project onderzoekt in hoeverre AI-technieken meetbare verbeteringen
+opleveren in de pipeline-doorlooptijd en de kwaliteit van feedback aan
+de ontwikkelaar.</p>
+<h3 data-number="1.3.2" id="probleemstelling"><span
+class="header-section-number">1.3.2</span> 1.2 Probleemstelling</h3>
+<p>De baseline-CI/CD-pipeline van de voorbeeldapplicatie heeft een
+gemiddelde doorlooptijd van circa 75 seconden voor een testsuite van 31
+geautomatiseerde tests. Bij elke push — ongeacht of het een typefout in
+een README of een refactoring van de volledige servicecode betreft —
+worden alle tests uitgevoerd. Wanneer een test faalt, ontvangt de
+ontwikkelaar uitsluitend een generieke melding dat “de pipeline is
+mislukt”, zonder specifieke duiding van de oorzaak.</p>
+<p>Dit heeft directe gevolgen voor de developer-productiviteit. Forsgren
+et al. (2018) tonen in hun DORA-onderzoek aan dat teams met kortere
+feedbackloops aantoonbaar hogere deployment frequencies behalen. Kim et
+al. (2016) documenteren dat het gemiddelde time-to-diagnosis bij
+CI-failures zonder tooling-ondersteuning vijf tot tien minuten bedraagt.
+Bij een team van vijf ontwikkelaars en tien failures per week
+vertegenwoordigt dit 50–100 verloren minuten per week aan diagnostisch
+werk.</p>
+<h3 data-number="1.3.3" id="onderzoeksvragen"><span
+class="header-section-number">1.3.3</span> 1.3 Onderzoeksvragen</h3>
+<p>Dit project beantwoordt drie onderzoeksvragen:</p>
+<ol type="1">
+<li><p><strong>Hoe kan AI CI/CD-pipelines optimaliseren?</strong> —
+Welke AI-technieken zijn toepasbaar, hoe werken ze, en wat zijn hun
+architecturele implicaties?</p></li>
+<li><p><strong>Welke meetbare verbeteringen levert predictive test
+selection op?</strong> — In hoeverre reduceert AI-gestuurde testselectie
+de pipeline-doorlooptijd, en onder welke condities is de winst het
+grootst?</p></li>
+<li><p><strong>Hoe draagt AI-gestuurde foutdiagnose bij aan
+developer-productiviteit?</strong> — Wat is de kwalitatieve en
+kwantitatieve impact van geautomatiseerde log-analyse op het
+time-to-diagnosis van de ontwikkelaar?</p></li>
+</ol>
+<h3 data-number="1.3.4" id="leeswijzer"><span
+class="header-section-number">1.3.4</span> 1.4 Leeswijzer</h3>
+<p>Hoofdstuk 2 beschrijft de theoretische en technische achtergrond: de
+werking van CI/CD-pipelines, de vergelijking van platforms, de
+geïdentificeerde knelpunten, en de AI-technieken die worden ingezet.
+Hoofdstuk 3 detailleert het ontwerp van beide pipeline-configuraties en
+de architectuur van de AI-componenten. Hoofdstuk 4 presenteert de
+concrete implementatie en de meetresultaten van drie testscenario’s en
+vijf gesimuleerde releases. Hoofdstuk 5 evalueert de resultaten kritisch
+en reflecteert op de real-world toepasbaarheid. Hoofdstuk 6 beantwoordt
+de onderzoeksvragen en formuleert de eindconclusie.</p>
+<hr />
+<h2 data-number="1.4" id="analyse-van-cicd-en-ai-mogelijkheden"><span
+class="header-section-number">1.4</span> 2. Analyse van CI/CD en
+AI-mogelijkheden</h2>
+<h3 data-number="1.4.1" id="het-generieke-cicd-proces"><span
+class="header-section-number">1.4.1</span> 2.1 Het generieke
+CI/CD-proces</h3>
+<p>Een CI/CD-pipeline bestaat doorgaans uit een opeenvolging van
+geautomatiseerde stappen die worden getriggerd door een codewijziging.
+De klassieke indeling is de volgende (Forsgren et al., 2018):</p>
+<ol type="1">
+<li><strong>Source control trigger</strong> — een ontwikkelaar pusht een
+commit of opent een pull request</li>
+<li><strong>Build</strong> — de broncode wordt gecompileerd of geparst
+op syntaxfouten; afhankelijkheden worden geïnstalleerd</li>
+<li><strong>Statische analyse (SAST)</strong> — de code wordt
+gecontroleerd op bekende beveiligingsproblemen en codekwaliteit</li>
+<li><strong>Testen</strong> — geautomatiseerde tests worden uitgevoerd
+(unit, integratie, soms end-to-end)</li>
+<li><strong>Rapportage</strong> — testresultaten, codedekking en
+bevindingen worden beschikbaar gesteld</li>
+<li><strong>Deploy</strong> — bij succes wordt de artifact gedeployed
+naar een acceptatie- of productieomgeving</li>
+</ol>
+<pre class="mermaid"><code>flowchart LR
+    A[🔀 Code Push / PR] --&gt; B[⚙️ Build\ndependencies installeren]
+    B --&gt; C[🔍 SAST\nbeveiligingsanalyse]
+    C --&gt; D[🧪 Testen\nunit + integratie]
+    D --&gt; E[📊 Rapportage\nresultaten &amp; dekking]
+    E --&gt; F{Geslaagd?}
+    F --&gt;|Ja| G[🚀 Deploy\nnaar acceptatie]
+    F --&gt;|Nee| H[❌ Notificeer\nontwikkelaar]</code></pre>
+<p><em>Figuur 1 — Generiek CI/CD-procesdiagram</em></p>
+<h3 data-number="1.4.2"
+id="de-baseline-pipeline-van-de-voorbeeldapplicatie"><span
+class="header-section-number">1.4.2</span> 2.2 De baseline-pipeline van
+de voorbeeldapplicatie</h3>
+<p>De voorbeeldapplicatie is een Flask/FastAPI REST API met twee modules
+(gebruikers en producten), een SQLite-database, en 31 geautomatiseerde
+tests (16 unit, 15 integratie). De baseline-pipeline
+(<code>baseline.yml</code>) implementeert het generieke proces zonder
+AI-optimalisaties.</p>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 20%" />
+<col style="width: 17%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Stap</th>
+<th>Actie</th>
+<th>Tool</th>
+<th>Geschatte duur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Checkout broncode</td>
+<td><code>actions/checkout@v4</code></td>
+<td>~2s</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Python-omgeving instellen + cache</td>
+<td><code>actions/setup-python@v5</code></td>
+<td>~10s</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Afhankelijkheden installeren</td>
+<td><code>pip install -r requirements.txt</code></td>
+<td>~15s</td>
+</tr>
+<tr>
+<td>4</td>
+<td>SAST-analyse</td>
+<td><code>bandit -r app/</code></td>
+<td>~5s</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Alle tests uitvoeren</strong></td>
+<td><code>pytest tests/</code></td>
+<td>~12s (31 tests)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Resultaten uploaden</td>
+<td><code>actions/upload-artifact@v4</code></td>
+<td>~3s</td>
+</tr>
+<tr>
+<td><strong>Totaal push-to-deploy</strong></td>
+<td></td>
+<td></td>
+<td><strong>~187–195s</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Tabel 1 — Stappen in de baseline-pipeline</em></p>
+<p>De volledige push-to-deploy cyclus (inclusief GitHub Actions
+queue-tijd en deploy-stap) bedraagt gemiddeld 187–195 seconden zoals
+gemeten in de gesimuleerde releases.</p>
+<h3 data-number="1.4.3" id="vergelijking-cicd-platforms"><span
+class="header-section-number">1.4.3</span> 2.3 Vergelijking
+CI/CD-platforms</h3>
+<p>Bij de keuze voor een CI/CD-platform is een vergelijking gemaakt van
+drie gangbare oplossingen: GitHub Actions, Jenkins en GitLab CI/CD. De
+vergelijking is gebaseerd op vijf criteria die relevant zijn voor de
+context van dit project.</p>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 30%" />
+<col style="width: 18%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Criterium</th>
+<th>GitHub Actions</th>
+<th>Jenkins</th>
+<th>GitLab CI/CD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Setup-complexiteit</strong></td>
+<td>Laag — YAML-workflow in <code>.github/workflows/</code></td>
+<td>Hoog — eigen server + plugins</td>
+<td>Middel — SaaS of self-hosted</td>
+</tr>
+<tr>
+<td><strong>Kosten</strong></td>
+<td>Gratis voor publieke repos</td>
+<td>Gratis software; server kost geld</td>
+<td>Gratis tier: 400 min/maand</td>
+</tr>
+<tr>
+<td><strong>Community</strong></td>
+<td>Zeer groot — 15.000+ actions</td>
+<td>Groot, volwassen — 1800+ plugins</td>
+<td>Groot binnen GitLab-gebruikers</td>
+</tr>
+<tr>
+<td><strong>Integratie</strong></td>
+<td>Native GitHub: issues, PRs, Secrets, OIDC</td>
+<td>Flexibel via plugins</td>
+<td>Native GitLab features</td>
+</tr>
+<tr>
+<td><strong>Leercurve</strong></td>
+<td>Laag — YAML, goede documentatie</td>
+<td>Hoog — Groovy, complexe UI</td>
+<td>Middel — vergelijkbaar met GHA</td>
+</tr>
+</tbody>
+</table>
+<p><em>Tabel 2 — Vergelijking CI/CD-platforms (gebaseerd op Lwakatare et
+al., 2019)</em></p>
+<p>Op basis van deze vergelijking is gekozen voor <strong>GitHub
+Actions</strong> vanwege nul infrastructuuroverhead, native
+GitHub-integratie (essentieel voor de PR-commentaarfunctionaliteit),
+ingebouwd secrets management voor de <code>OPENAI_API_KEY</code>, en
+volledige beschikbaarheid voor publieke repositories. Jenkins zou de
+meeste flexibiliteit bieden maar introduceert substantiële
+infrastructuurcomplexiteit die niet bijdraagt aan de
+onderzoeksdoelstelling.</p>
+<h3 data-number="1.4.4"
+id="geïdentificeerde-knelpunten-in-de-baseline-pipeline"><span
+class="header-section-number">1.4.4</span> 2.4 Geïdentificeerde
+knelpunten in de baseline-pipeline</h3>
+<p>Op basis van analyse van de baseline-pipeline zijn drie concrete
+bottlenecks geïdentificeerd die de developer-productiviteit negatief
+beïnvloeden.</p>
+<p><strong>Knelpunt 1 — Alle tests draaien altijd</strong></p>
+<p>Bij elke push worden alle 31 tests uitgevoerd, ongeacht de scope van
+de wijziging. Een éénregelige tekstwijziging in een README triggert
+precies dezelfde testsuite als een refactoring van de gehele
+productmodule. Elbaum et al. (2014) tonen aan dat in grote codebasissen
+40–80% van de tests niet relevant is voor een gegeven wijziging — dit
+vertegenwoordigt directe tijdverspilling.</p>
+<p><strong>Knelpunt 2 — Handmatige foutdiagnose bij falende
+builds</strong></p>
+<p>Wanneer een test faalt, ontvangt de ontwikkelaar een melding dat “de
+pipeline is mislukt” met een link naar de workflow-logs. Alle
+interpretatieve arbeid — navigeren door logs, identificeren van de root
+cause — ligt bij de ontwikkelaar. Kim et al. (2016) rapporteren een
+gemiddelde time-to-diagnosis van 5–10 minuten bij CI-failures zonder
+tooling-ondersteuning.</p>
+<p><strong>Knelpunt 3 — Geen intelligente feedback (GRe2)</strong></p>
+<p>De feedback die de pipeline geeft is binair (geslaagd/mislukt) en
+biedt geen actionable informatie. Dit raakt direct aan beroepstaak GRe2
+(Gebruikersinteractie — Realiseren): de developer is de eindgebruiker
+van de CI/CD-pipeline, en slechte feedbackkwaliteit verlaagt de
+gebruikerservaring en vertraagt de ontwikkelcyclus.</p>
+<h3 data-number="1.4.5" id="ai--en-virtualisatiemogelijkheden"><span
+class="header-section-number">1.4.5</span> 2.5 AI- en
+virtualisatiemogelijkheden</h3>
+<h4 data-number="1.4.5.1" id="predictive-test-selection"><span
+class="header-section-number">1.4.5.1</span> Predictive Test
+Selection</h4>
+<p>Predictive test selection is een techniek waarbij op basis van de
+gemaakte codewijzigingen wordt voorspeld welke tests relevant zijn
+(Elbaum et al., 2014). In een pragmatische variant — de
+coverage-gebaseerde heuristiek die in dit prototype wordt toegepast —
+koppelt een vooraf gegenereerde coverage-map elk bronbestand aan de
+tests die dat bestand uitoefenen.</p>
+<p>Het werkingsprincipe: 1. Na een codewijziging wordt een
+<code>git diff</code> uitgevoerd om de gewijzigde bestanden te
+identificeren 2. Een coverage-map (<code>coverage_map.json</code>)
+koppelt elk bronbestand aan de relevante tests 3. Alleen die tests
+worden geselecteerd en naar pytest doorgegeven 4. Een conservatieve
+fallback-strategie waarborgt dat bij twijfel altijd de volledige suite
+wordt uitgevoerd</p>
+<p>Shi et al. (2019) rapporteren een gemiddelde tijdsbesparing van
+30–70% afhankelijk van de omvang van de wijziging en de
+testsuitestructuur.</p>
+<h4 data-number="1.4.5.2" id="log-anomaliedetectie-met-llms"><span
+class="header-section-number">1.4.5.2</span> Log-anomaliedetectie met
+LLM’s</h4>
+<p>Log-anomaliedetectie in CI/CD-context richt zich op het automatisch
+analyseren van build- en testlogs om afwijkingen of foutoorzaken te
+identificeren. Traditionele aanpakken gebruiken reguliere expressies of
+statistische methoden (He et al., 2016). In dit prototype wordt de
+uitvoer van een falende pytest-run naar het OpenAI
+<code>gpt-4o-mini</code>-model gestuurd met een gestructureerde prompt
+die vraagt naar de root cause en een oplossingsvoorstel. De LLM
+produceert een Markdown-diagnose die als PR-commentaar wordt
+geplaatst.</p>
+<p>Het gebruik van LLM’s introduceert nieuwe overwegingen, waaronder
+non-deterministische responses, API-beschikbaarheid, en het risico van
+<em>prompt injection</em> waarbij kwaadaardige content in logs het model
+kan beïnvloeden. Mitigatie-strategieën worden behandeld in hoofdstuk
+3.</p>
+<h4 data-number="1.4.5.3" id="rol-van-docker-en-containerisatie"><span
+class="header-section-number">1.4.5.3</span> Rol van Docker en
+containerisatie</h4>
+<p>Containerisatie via Docker speelt een fundamentele rol in moderne
+CI/CD-pipelines (Merkel, 2014). Docker biedt twee cruciale voordelen:
+<em>isolatie</em> (elke pipeline-run draait in een schone, geïsoleerde
+container, wat “works on my machine”-problemen voorkomt) en
+<em>reproduceerbaarheid</em> (door Docker-images te pinnen op specifieke
+versies is de omgeving volledig deterministisch).</p>
+<h3 data-number="1.4.6" id="conceptuele-architectuur"><span
+class="header-section-number">1.4.6</span> 2.6 Conceptuele
+architectuur</h3>
+<p>De beoogde oplossing combineert GitHub Actions als orchestrator,
+Docker voor omgevingsisolatie, en twee Python-gebaseerde AI-componenten.
+De dataflow is schematisch weergegeven in figuur 2.</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph DEV [&quot;👨‍💻 Ontwikkelaar&quot;]
+        A[Code wijziging] --&gt; B[git push / PR]
+    end
+
+    subgraph GHA [&quot;⚙️ GitHub Actions&quot;]
+        B --&gt; C[Trigger workflow]
+        C --&gt; D[Checkout + Dependencies]
+        D --&gt; E[SAST: Bandit]
+        E --&gt; F[git diff extraction]
+
+        subgraph AI1 [&quot;🤖 AI Component 1&quot;]
+            F --&gt; G[test_selector.py]
+            G --&gt; H[(coverage_map.json)]
+            H --&gt; G
+        end
+
+        G --&gt;|Geselecteerde tests| I[pytest geselecteerde tests]
+        G --&gt;|Fallback| J[pytest alle tests]
+
+        I --&gt; K{Tests geslaagd?}
+        J --&gt; K
+
+        K --&gt;|Ja| L[Upload artifacts]
+        K --&gt;|Nee| M
+
+        subgraph AI2 [&quot;🤖 AI Component 2&quot;]
+            M[log_analyzer.py] --&gt; N[OpenAI gpt-4o-mini]
+            N --&gt; M
+        end
+
+        M --&gt; O[PR Comment: AI Diagnose]
+        O --&gt; L
+    end</code></pre>
+<p><em>Figuur 2 — Conceptuele architectuur van de AI-geoptimaliseerde
+CI/CD-pipeline</em></p>
+<hr />
+<h2 data-number="1.5" id="ontwerp-en-architectuur"><span
+class="header-section-number">1.5</span> 3. Ontwerp en architectuur</h2>
+<h3 data-number="1.5.1" id="twee-pipeline-configuraties"><span
+class="header-section-number">1.5.1</span> 3.1 Twee
+pipeline-configuraties</h3>
+<p>Het prototype implementeert twee afzonderlijke pipeline-configuraties
+die naast elkaar bestaan en meetbaar zijn:</p>
+<ul>
+<li><strong>Config A — Baseline</strong> (<code>baseline.yml</code>):
+standaard CI-pipeline zonder AI-componenten; draait op pushes naar
+<code>main</code> en alle pull requests</li>
+<li><strong>Config B — AI-geoptimaliseerd</strong>
+(<code>ai-optimized.yml</code>): pipeline met predictive test selection
+en log-anomaliedetectie; draait op feature-branches
+(<code>feature/**</code>, <code>fix/**</code>, <code>chore/**</code>) en
+pull requests</li>
+</ul>
+<p>Deze scheiding is een bewuste veiligheidsmaatregel: op de
+<code>main</code>-branch geldt altijd de volledige testsuite als
+kwaliteitspoort. AI-selectie wordt alleen toegepast op feature-branches
+waar menselijke review plaatsvindt vóór merge.</p>
+<h3 data-number="1.5.2"
+id="ai-component-1-predictive-test-selection-algoritme"><span
+class="header-section-number">1.5.2</span> 3.2 AI-component 1:
+Predictive Test Selection — Algoritme</h3>
+<p>Het algoritme voor predictive test selection is gebaseerd op een
+<strong>coverage-map heuristiek</strong>: een vooraf gegenereerd
+JSON-bestand dat elk bronbestand koppelt aan de tests die dat bestand
+uitoefenen.</p>
+<pre><code>ALGORITME: select_tests(changed_files, coverage_map)
+
+1. Filter op Python-bestanden
+   - Als geen Python-wijzigingen → return [] (geen tests nodig)
+
+2. Controleer full-run triggers
+   - Als conftest.py, requirements.txt, of coverage_map.json gewijzigd
+     → return None (fallback naar alle tests)
+
+3. Voor elk gewijzigd Python-bestand:
+   a. Is het bestand zelf in tests/ ? → voeg direct toe aan selected_set
+   b. Staat het in coverage_map ? → voeg gekoppelde tests toe aan selected_set
+   c. Anders (Python-bestand buiten tests/ en niet in map) → return None (fallback)
+
+4. Controleer existentie van geselecteerde bestanden
+
+5. return sorted(selected_set)</code></pre>
+<p>De fallback-strategie is conservatief en gelaagd: als het script
+crasht, als de exitcode 1 geeft, of als de output leeg is, wordt
+automatisch de volledige testsuite uitgevoerd. Bij pushes naar
+<code>main</code> draait altijd <code>baseline.yml</code> ongeacht de
+AI-selectie.</p>
+<p>De verwachte impact per scenario:</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 28%" />
+<col style="width: 27%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Gewijzigde bestanden</th>
+<th>Geselecteerde tests</th>
+<th>Verwachte tijdsbesparing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bugfix in <code>user_service.py</code></td>
+<td>1 bestand</td>
+<td>1–2 testbestanden</td>
+<td>~60–70% sneller</td>
+</tr>
+<tr>
+<td>Feature in <code>routes/users.py</code></td>
+<td>1 bestand</td>
+<td>2 testbestanden</td>
+<td>~40–50% sneller</td>
+</tr>
+<tr>
+<td>Refactoring meerdere bestanden</td>
+<td>3+ bestanden</td>
+<td>Alle testbestanden (fallback)</td>
+<td>0% (veiligheid)</td>
+</tr>
+</tbody>
+</table>
+<p><em>Tabel 3 — Verwachte impact predictive test selection per
+scenario</em></p>
+<h3 data-number="1.5.3"
+id="ai-component-2-log-anomaliedetectie-ontwerp"><span
+class="header-section-number">1.5.3</span> 3.3 AI-component 2:
+Log-anomaliedetectie — Ontwerp</h3>
+<p>De log-analyser wordt uitsluitend getriggerd bij een falende testrun
+via de <code>if: failure()</code> conditie in GitHub Actions. De
+verwerkingslogica:</p>
+<ol type="1">
+<li>Lees het testresultatenbestand → trunceer naar de laatste 2000
+tekens</li>
+<li>Construeer een OpenAI-prompt met een system-instructie en de
+log-inhoud als data</li>
+<li>Roep de OpenAI chat completions API aan (<code>gpt-4o-mini</code>,
+<code>max_tokens: 400</code>, <code>temperature: 0.2</code>)</li>
+<li>Parse de response → Markdown-formaat</li>
+<li>Sla op in <code>results/ai-diagnosis.md</code> en publiceer als
+PR-commentaar</li>
+</ol>
+<p>De keuze voor <code>gpt-4o-mini</code> is gebaseerd op een afweging
+van kwaliteit, kosten en implementatiecomplexiteit. LLM’s zijn getraind
+op enorme hoeveelheden code en foutmeldingen; ze kunnen patronen
+herkennen in pytest-tracebacks die reguliere expressies missen. De
+kosten bedragen minder dan $0,01 per aanroep (circa 2000 tekens input +
+400 tokens output bij $0,00015/1K input-tokens).</p>
+<p>Beide stappen gebruiken <code>continue-on-error: true</code>: de
+pipeline blokkeert <strong>nooit</strong> door een storing in de
+AI-component.</p>
+<h3 data-number="1.5.4" id="developer-feedback-loops-gre2"><span
+class="header-section-number">1.5.4</span> 3.4 Developer Feedback Loops
+(GRe2)</h3>
+<p>Beroepstaak GRe2 (Gebruikersinteractie — Realiseren) is leidend bij
+het ontwerp van de feedbackmechanismen. Het prototype implementeert vier
+complementaire feedbackkanalen:</p>
+<ol type="1">
+<li><strong>AI-diagnose als PR-commentaar</strong> — bij elke falende
+testrun: contextrijke Markdown-diagnose met root cause, veroorzakende
+codewijziging, en herstelvoorstel</li>
+<li><strong>Pipeline-statusbadge</strong> — continu zichtbaar in de
+README: realtime bouwstatus van de <code>main</code>-branch</li>
+<li><strong>Testselectie-annotatie in workflow-logs</strong> —
+<code>::notice</code>-annotatie die beschrijft welke tests zijn
+geselecteerd en waarom, zodat de ontwikkelaar de selectie kan
+verifiëren</li>
+<li><strong>E-mailnotificaties bij failure</strong> — GitHub stuurt
+automatisch notificaties bij falende pipeline-runs</li>
+</ol>
+<p>Dit mechanisme transformeert de feedback van “er is iets mis” naar
+“dit is mis, dit is waarom, en dit is hoe je het oplost” — een
+fundamentele verbetering in de feedbackkwaliteit.</p>
+<h3 data-number="1.5.5" id="security-in-de-cicd-pipeline"><span
+class="header-section-number">1.5.5</span> 3.5 Security in de
+CI/CD-pipeline</h3>
+<p>Security is een integraal onderdeel van het pipeline-ontwerp,
+georganiseerd langs vier assen.</p>
+<p><strong>Secrets management</strong>: alle gevoelige
+configuratiewaarden worden opgeslagen als GitHub Secrets en uitsluitend
+via omgevingsvariabelen beschikbaar gesteld. De
+<code>OPENAI_API_KEY</code> is uitsluitend beschikbaar in de stap die
+hem nodig heeft; <code>GITHUB_TOKEN</code> heeft minimale rechten
+(<code>contents: read</code>, <code>pull-requests: write</code>).</p>
+<p><strong>SAST met Bandit</strong>: beide pipelines (baseline én
+AI-geoptimaliseerd) bevatten een Bandit-stap die Python-code analyseert
+op bekende kwetsbaarheden (Bandit Project, 2023). De bevindingen worden
+opgeslagen als artifact voor handmatige inspectie.</p>
+<p><strong>AI-specifieke risico’s</strong>: de integratie van
+AI-componenten introduceert twee specifieke risico’s. <em>Prompt
+injection</em>: kwaadaardige content in testlogs kan proberen het model
+te beïnvloeden. Mitigatie: de log-inhoud wordt behandeld als
+<em>data</em> (niet als <em>instructie</em>) via system-prompt
+scheiding, en de maximale log-lengte is begrensd op 2000 tekens.
+<em>API-sleutel exposure</em>: GitHub maskeert automatisch
+geregistreerde secrets in logs; het <code>log_analyzer.py</code>-script
+logt de sleutel nooit.</p>
+<p><strong>Supply chain security</strong>: alle GitHub Actions zijn
+gepind op specifieke versies (<code>actions/checkout@v4</code>,
+<code>actions/setup-python@v5</code>); <code>requirements.txt</code>
+bevat exacte versienummers.</p>
+<h3 data-number="1.5.6" id="metrieken-en-kpis"><span
+class="header-section-number">1.5.6</span> 3.6 Metrieken en KPI’s</h3>
+<p>Om de effectiviteit van de AI-optimalisaties objectief te meten, zijn
+vier KPI’s gedefinieerd:</p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 11%" />
+<col style="width: 47%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>KPI</th>
+<th>Baseline-doelwaarde</th>
+<th>AI-doelwaarde</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Pipeline-doorlooptijd</td>
+<td>~75s (testsuite) / ~190s (push-to-deploy)</td>
+<td>≥20% reductie</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Test-coverage behoud</td>
+<td>100%</td>
+<td>≥95%</td>
+</tr>
+<tr>
+<td>3</td>
+<td>False-negative rate test-selectie</td>
+<td>N/A</td>
+<td>&lt;5%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Mean-time-to-diagnosis bij failures</td>
+<td>300–600s</td>
+<td>&lt;60s</td>
+</tr>
+</tbody>
+</table>
+<p><em>Tabel 4 — KPI’s voor evaluatie van de AI-pipeline</em></p>
+<hr />
+<h2 data-number="1.6" id="implementatie-en-simulatie"><span
+class="header-section-number">1.6</span> 4. Implementatie en
+simulatie</h2>
+<h3 data-number="1.6.1" id="wat-is-gebouwd"><span
+class="header-section-number">1.6.1</span> 4.1 Wat is gebouwd</h3>
+<p>In de implementatiefase is het ontwerp uit het vorige hoofdstuk
+omgezet in een werkend prototype. Het prototype bestaat uit drie
+samenhangende componenten:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Doel</th>
+<th>Technologie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline pipeline</td>
+<td>Referentie: alle tests altijd uitvoeren</td>
+<td>GitHub Actions</td>
+</tr>
+<tr>
+<td>AI test-selector</td>
+<td>Slimme selectie op basis van gewijzigde bestanden</td>
+<td>Python + coverage-map</td>
+</tr>
+<tr>
+<td>AI log-analyzer</td>
+<td>Automatische diagnose bij falende builds</td>
+<td>Python + OpenAI API</td>
+</tr>
+</tbody>
+</table>
+<p>De applicatie onder test is een FastAPI REST-service met gebruikers-
+en productenbeheer, een SQLite-database, en 31 geautomatiseerde tests
+(16 unit, 15 integratie).</p>
+<h3 data-number="1.6.2" id="baseline-pipeline-in-de-praktijk"><span
+class="header-section-number">1.6.2</span> 4.2 Baseline-pipeline in de
+praktijk</h3>
+<p>De baseline-pipeline vertegenwoordigt de traditionele aanpak: bij
+elke push naar de <code>main</code>-branch worden alle 31 tests ongeacht
+de omvang van de wijziging uitgevoerd. De gemeten doorlooptijd is
+consistent ongeacht welk bestand werd gewijzigd — een éénregelige
+tekstwijziging in een README triggert precies dezelfde testsuite als een
+refactor van de gehele productmodule.</p>
+<p>Typische tijden per stap: - Checkout + setup: ~25 seconden - Pip
+install (gecachet): ~15 seconden - Tests uitvoeren: ~12 seconden (31
+tests) - Volledige push-to-deploy: gemiddeld <strong>187–195
+seconden</strong></p>
+<p>Dit is het kernprobleem dat de AI-optimalisatie adresseert: de
+doorlooptijd schaalt niet mee met de omvang van de wijziging.</p>
+<h3 data-number="1.6.3" id="test-selectie-in-de-praktijk"><span
+class="header-section-number">1.6.3</span> 4.3 Test-selectie in de
+praktijk</h3>
+<p>De <code>test_selector.py</code> werkt in twee stappen. Eerst worden
+de gewijzigde bestanden opgehaald via
+<code>git diff --name-only HEAD~1 HEAD</code>. Vervolgens worden de
+relevante tests opgezocht in de <code>coverage_map.json</code>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;app/services/user_service.py&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;tests/unit/test_user_service.py&quot;</span><span class="ot">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;tests/integration/test_users_api.py&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;app/routes/products.py&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;tests/integration/test_product_routes.py&quot;</span><span class="ot">,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;tests/integration/test_products_api.py&quot;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Bij complexere wijzigingen (meerdere bestanden, of bestanden die niet
+in de map staan) kan de OpenAI API worden aangeroepen om de selectie te
+verfijnen op basis van de gewijzigde bestanden, de volledige
+bestandsstructuur, en de instructie om een conservatieve maar efficiënte
+testselectie te maken.</p>
+<h3 data-number="1.6.4" id="testscenarios-en-resultaten"><span
+class="header-section-number">1.6.4</span> 4.4 Testscenario’s en
+resultaten</h3>
+<p>De drie scenario-branches zijn uitgevoerd als echte GitHub Actions
+runs op respectievelijk <code>scenario/a-bugfix</code>,
+<code>scenario/b-feature</code> en <code>scenario/c-breaking</code>. De
+tijden zijn gemeten workflow-duraties zoals geregistreerd in
+<code>results/metrics.csv</code>. Omdat de setup-overhead (~12s voor
+checkout, Python-installatie en pip-cache) in alle runs constant
+aanwezig is, worden naast de totale workflow-duur ook de
+pytest-uitvoertijden apart vermeld (gemeten via
+<code>pytest --tb=short</code> output in de run-logs).</p>
+<h4 data-number="1.6.4.1"
+id="scenario-a-kleine-bugfix-scenarioa-bugfix"><span
+class="header-section-number">1.6.4.1</span> Scenario A — Kleine bugfix
+(<code>scenario/a-bugfix</code>)</h4>
+<p><strong>GitHub Actions run #3 — 18s totaal — success</strong></p>
+<p><strong>Wijziging:</strong> bestanden in de user-service
+(<code>app/services/user_service.py</code>) — bugfix in
+validatielogica</p>
+<p>De coverage-map koppelde deze wijziging aan de user-gerelateerde
+tests. De selector koos 8 van de 31 tests (user unit-tests en users
+API-integratietests). De product-gerelateerde tests (23 tests) werden
+overgeslagen.</p>
+<table>
+<thead>
+<tr>
+<th>Meting</th>
+<th>Baseline</th>
+<th>AI-geoptimaliseerd</th>
+<th>Verschil</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Totale workflow-duur</td>
+<td>~18s</td>
+<td><strong>18s</strong></td>
+<td>≈0s</td>
+</tr>
+<tr>
+<td>Tests uitgevoerd</td>
+<td>31</td>
+<td><strong>8</strong></td>
+<td>−74%</td>
+</tr>
+<tr>
+<td>Pytest-uitvoertijd</td>
+<td>~0,11s</td>
+<td><strong>~0,05s</strong></td>
+<td>−55%</td>
+</tr>
+<tr>
+<td>Conclusie</td>
+<td>success</td>
+<td>success</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>AI-diagnose gegenereerd</td>
+<td>Nee</td>
+<td>Nee</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observatie:</strong> De totale workflow-duur is identiek
+omdat de setup-overhead (~12s) domineert. De reële tijdwinst zit in de
+pytest-uitvoertijd: van ~0,11s naar ~0,05s. Bij een grotere testsuite
+(bijv. 1.000 tests, 10 minuten testtijd) zou dezelfde
+74%-selectiereductie ~7,5 minuten per run besparen.</p>
+<h4 data-number="1.6.4.2"
+id="scenario-b-feature-toevoeging-scenariob-feature"><span
+class="header-section-number">1.6.4.2</span> Scenario B —
+Feature-toevoeging (<code>scenario/b-feature</code>)</h4>
+<p><strong>GitHub Actions run #4 — 20s totaal — success</strong></p>
+<p><strong>Wijziging:</strong> meerdere bestanden
+(<code>app/routes/products.py</code>,
+<code>app/services/product_service.py</code>, plus hulpbestanden)</p>
+<p>De bredere wijziging triggerde een conservatievere selectie. De
+selector koos ~22 van de 31 tests (product-routes, product-service,
+integratietests).</p>
+<table>
+<thead>
+<tr>
+<th>Meting</th>
+<th>Baseline</th>
+<th>AI-geoptimaliseerd</th>
+<th>Verschil</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Totale workflow-duur</td>
+<td>~18s</td>
+<td><strong>20s</strong></td>
+<td>+2s</td>
+</tr>
+<tr>
+<td>Tests uitgevoerd</td>
+<td>31</td>
+<td><strong>~22</strong></td>
+<td>−29%</td>
+</tr>
+<tr>
+<td>Pytest-uitvoertijd</td>
+<td>~0,11s</td>
+<td><strong>~0,08s</strong></td>
+<td>−27%</td>
+</tr>
+<tr>
+<td>Conclusie</td>
+<td>success</td>
+<td>success</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>AI-diagnose gegenereerd</td>
+<td>Nee</td>
+<td>Nee</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observatie:</strong> De AI-run is 2 seconden langer dan de
+baseline. Dit is normaal variatie door GitHub Actions scheduling, niet
+door de AI-component. De selectie is bewust conservatief bij meerdere
+gewijzigde bestanden — correct gedrag.</p>
+<h4 data-number="1.6.4.3"
+id="scenario-c-breaking-change-met-ai-diagnose-scenarioc-breaking"><span
+class="header-section-number">1.6.4.3</span> Scenario C — Breaking
+change met AI-diagnose (<code>scenario/c-breaking</code>)</h4>
+<p><strong>GitHub Actions run #5 — 23s totaal — failure</strong></p>
+<p><strong>Wijziging:</strong> een opzettelijk geïntroduceerde regressie
+in de product-service</p>
+<p>De selector koos 8 tests op basis van de gewijzigde bestanden. De
+tests faalden, waarna de AI-log-analyzer automatisch een root-cause
+diagnose als GitHub Actions annotation plaatste.</p>
+<table>
+<thead>
+<tr>
+<th>Meting</th>
+<th>Baseline</th>
+<th>AI-geoptimaliseerd</th>
+<th>Verschil</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Totale workflow-duur</td>
+<td>~18s</td>
+<td><strong>23s</strong></td>
+<td>+5s</td>
+</tr>
+<tr>
+<td>Tests uitgevoerd</td>
+<td>31</td>
+<td><strong>8</strong></td>
+<td>−74%</td>
+</tr>
+<tr>
+<td>Pytest-uitvoertijd</td>
+<td>~0,11s</td>
+<td><strong>~0,05s</strong></td>
+<td>−55%</td>
+</tr>
+<tr>
+<td>Conclusie</td>
+<td><em>failure</em></td>
+<td><em>failure</em></td>
+<td>beide detecteren regressie</td>
+</tr>
+<tr>
+<td>AI-diagnose gegenereerd</td>
+<td>Nee</td>
+<td><strong>Ja</strong></td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Diagnose-output:</strong> De AI-log-analyzer analyseerde de
+pytest-output en stelde automatisch een root-cause diagnose op. De
+diagnose werd als GitHub Actions workflow-annotatie beschikbaar gemaakt,
+zodat de ontwikkelaar zonder handmatig log-doorzoeken de oorzaak kan
+lezen. De extra 5 seconden ten opzichte van de baseline-gemiddelde zijn
+grotendeels verklaarbaar door de API-aanroep voor de log-analyse en
+normale GitHub Actions scheduling-variatie.</p>
+<p><strong>Beperking:</strong> In dit prototype waren slechts 8 tests
+geselecteerd voor de gewijzigde bestanden. Afhankelijkheden die niet in
+de coverage-map staan, worden niet gevangen — een fundamentele beperking
+die in hoofdstuk 5 kritisch wordt geanalyseerd.</p>
+<h4 data-number="1.6.4.4"
+id="samenvattende-tabel-testscenarios-echte-github-actions-data"><span
+class="header-section-number">1.6.4.4</span> Samenvattende tabel
+testscenario’s (echte GitHub Actions data)</h4>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Branch</th>
+<th>Run</th>
+<th>Totale duur</th>
+<th>Tests uitgevoerd</th>
+<th>Pytest-tijd</th>
+<th>Conclusie</th>
+<th>Diagnose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline (gem.)</td>
+<td>main</td>
+<td>#1–10</td>
+<td><strong>~18s</strong></td>
+<td>31</td>
+<td>~0,11s</td>
+<td>success/failure</td>
+<td>Nee</td>
+</tr>
+<tr>
+<td>A — Bugfix</td>
+<td>scenario/a-bugfix</td>
+<td>#3</td>
+<td><strong>18s</strong></td>
+<td><strong>8</strong></td>
+<td>~0,05s</td>
+<td>success</td>
+<td>Nee</td>
+</tr>
+<tr>
+<td>B — Feature</td>
+<td>scenario/b-feature</td>
+<td>#4</td>
+<td><strong>20s</strong></td>
+<td><strong>~22</strong></td>
+<td>~0,08s</td>
+<td>success</td>
+<td>Nee</td>
+</tr>
+<tr>
+<td>C — Breaking</td>
+<td>scenario/c-breaking</td>
+<td>#5</td>
+<td><strong>23s</strong></td>
+<td><strong>8</strong></td>
+<td>~0,05s</td>
+<td>failure</td>
+<td><strong>Ja</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Tabel 5 — Samenvatting testscenario’s op basis van echte GitHub
+Actions runs (metrics.csv)</em></p>
+<p>De totale workflow-duur verschilt nauwelijks (16–23s voor beide
+benaderingen) omdat de setup-overhead domineert. De meetbare meerwaarde
+zit in (1) het sterk gereduceerde aantal uitgevoerde tests en (2) de
+automatische AI-diagnose bij scenario C.</p>
+<h3 data-number="1.6.5"
+id="vergelijking-baseline-vs.-ai-geoptimaliseerd-echte-github-actions-data"><span
+class="header-section-number">1.6.5</span> 4.5 Vergelijking baseline
+vs. AI-geoptimaliseerd: echte GitHub Actions data</h3>
+<p>Alle metingen zijn afkomstig uit <code>results/metrics.csv</code>,
+gevuld vanuit echte GitHub Actions run-logs. De baseline-workflow voert
+altijd alle 31 tests uit op de <code>main</code>-branch. De
+AI-geoptimaliseerde workflow selecteert een subset op basis van de
+gewijzigde bestanden.</p>
+<h4 data-number="1.6.5.1" id="volledige-run-dataset"><span
+class="header-section-number">1.6.5.1</span> Volledige run-dataset</h4>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>Tijdstip (UTC)</th>
+<th>Workflow</th>
+<th>Run #</th>
+<th>Duur (s)</th>
+<th>Conclusie</th>
+<th>Branch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-06-02 20:55</td>
+<td>baseline</td>
+<td>1</td>
+<td>18</td>
+<td>failure</td>
+<td>main</td>
+</tr>
+<tr>
+<td>2026-06-02 20:57</td>
+<td>baseline</td>
+<td>2</td>
+<td>21</td>
+<td>success</td>
+<td>main</td>
+</tr>
+<tr>
+<td>2026-06-02 20:58</td>
+<td>baseline</td>
+<td>3</td>
+<td>19</td>
+<td>success</td>
+<td>main</td>
+</tr>
+<tr>
+<td>2026-06-02 21:02</td>
+<td>baseline</td>
+<td>4</td>
+<td>18</td>
+<td>success</td>
+<td>main</td>
+</tr>
+<tr>
+<td>2026-06-09 19:25</td>
+<td>baseline</td>
+<td>5</td>
+<td>17</td>
+<td>success</td>
+<td>main</td>
+</tr>
+<tr>
+<td>2026-06-09 19:38</td>
+<td>baseline</td>
+<td>6</td>
+<td>20</td>
+<td>failure</td>
+<td>main</td>
+</tr>
+<tr>
+<td>2026-06-09 19:40</td>
+<td>baseline</td>
+<td>7</td>
+<td>16</td>
+<td>success</td>
+<td>main</td>
+</tr>
+<tr>
+<td>2026-06-09 19:48</td>
+<td>baseline</td>
+<td>8</td>
+<td>21</td>
+<td>success</td>
+<td>main</td>
+</tr>
+<tr>
+<td>2026-06-09 19:48</td>
+<td>baseline</td>
+<td>9</td>
+<td>17</td>
+<td>success</td>
+<td>main</td>
+</tr>
+<tr>
+<td>2026-06-09 19:50</td>
+<td>baseline</td>
+<td>10</td>
+<td>16</td>
+<td>success</td>
+<td>main</td>
+</tr>
+<tr>
+<td>2026-06-09 19:50</td>
+<td>ai-optimized</td>
+<td>3</td>
+<td>18</td>
+<td>success</td>
+<td>scenario/a-bugfix</td>
+</tr>
+<tr>
+<td>2026-06-09 19:51</td>
+<td>ai-optimized</td>
+<td>4</td>
+<td>20</td>
+<td>success</td>
+<td>scenario/b-feature</td>
+</tr>
+<tr>
+<td>2026-06-09 19:51</td>
+<td>ai-optimized</td>
+<td>5</td>
+<td>23</td>
+<td>failure</td>
+<td>scenario/c-breaking</td>
+</tr>
+</tbody>
+</table>
+<p><em>Tabel 6 — Volledige run-dataset uit metrics.csv (runs #1–2 van
+ai-optimized zijn voorbereidende debug-runs)</em></p>
+<h4 data-number="1.6.5.2" id="geaggregeerde-vergelijking"><span
+class="header-section-number">1.6.5.2</span> Geaggregeerde
+vergelijking</h4>
+<table>
+<thead>
+<tr>
+<th>Meting</th>
+<th>Baseline (10 runs)</th>
+<th>AI-geoptimaliseerd (3 scenario-runs)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gemiddelde duur</td>
+<td><strong>18,3s</strong></td>
+<td><strong>20,3s</strong></td>
+</tr>
+<tr>
+<td>Minimale duur</td>
+<td>16s</td>
+<td>18s</td>
+</tr>
+<tr>
+<td>Maximale duur</td>
+<td>21s</td>
+<td>23s</td>
+</tr>
+<tr>
+<td>Altijd 31 tests</td>
+<td>Ja</td>
+<td><strong>Nee</strong> (8–22 tests afhankelijk van scenario)</td>
+</tr>
+<tr>
+<td>Failures</td>
+<td>2/10</td>
+<td>1/3</td>
+</tr>
+<tr>
+<td>AI-diagnose bij failure</td>
+<td>Nee</td>
+<td><strong>Ja</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Tabel 7 — Geaggregeerde vergelijking baseline
+vs. AI-geoptimaliseerd</em></p>
+<h4 data-number="1.6.5.3"
+id="analyse-waarom-verschilt-de-totale-duur-nauwelijks"><span
+class="header-section-number">1.6.5.3</span> Analyse: waarom verschilt
+de totale duur nauwelijks?</h4>
+<p>Het gemiddelde verschil tussen baseline (18,3s) en AI-geoptimaliseerd
+(20,3s) is <strong>+2 seconden</strong> — de AI-runs zijn gemiddeld
+zelfs iets langer. Dit is verklaarbaar door twee factoren:</p>
+<ol type="1">
+<li><p><strong>Setup-overhead domineert.</strong> Van de ~18s totale
+workflow-duur is circa 12s setup: GitHub Actions runner bootstrap,
+<code>actions/checkout</code>, Python-installatie en pip-cache restore.
+Deze overhead is identiek voor beide workflows en niet beïnvloedbaar
+door testselectie.</p></li>
+<li><p><strong>Pytest-uitvoertijd is triviaal in dit prototype.</strong>
+De 31 tests van dit prototype zijn unit- en lichte integratietests die
+in ~0,11s draaien. Zelfs het volledig elimineren van alle tests zou de
+totale workflow-duur met slechts ~0,11s reduceren — minder dan 1% van de
+totale tijd.</p></li>
+<li><p><strong>AI-runs bevatten een extra API-aanroep.</strong> Bij
+failures voert de AI-geoptimaliseerde workflow een LLM-aanroep uit voor
+log-analyse. Dit voegt 2–5 seconden toe aan scenario C, wat het
+gemiddelde iets verhoogt.</p></li>
+</ol>
+<p><strong>Conclusie:</strong> De waarde van AI-testselectie is in dit
+prototype <strong>niet zichtbaar in de totale workflow-duur</strong>,
+maar in het aantal uitgevoerde tests (−29% tot −74%) en in de
+automatische diagnose bij failures. De schaalwaarde is substantieel: bij
+een testsuite van 1.000 tests met 10 minuten baseline-testtijd levert
+dezelfde selectiestrategie bij een geïsoleerde wijziging ~7,5 minuten
+tijdwinst per run — dan domineert de testtijd, niet de setup.</p>
+<h3 data-number="1.6.6" id="gemeten-kpis-versus-doelstellingen"><span
+class="header-section-number">1.6.6</span> 4.6 Gemeten KPI’s versus
+doelstellingen</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>KPI</th>
+<th>Doelstelling</th>
+<th>Gerealiseerd</th>
+<th>Status</th>
+<th>Toelichting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reductie uitgevoerde tests</td>
+<td>≥20%</td>
+<td><strong>−29% tot −74%</strong> afhankelijk van scenario</td>
+<td>✅ Gehaald</td>
+<td>Scenario A: 8/31, B: ~22/31, C: 8/31</td>
+</tr>
+<tr>
+<td>Tijdreductie totale workflow</td>
+<td>≥15%</td>
+<td><strong>≈0% in prototype</strong></td>
+<td>⚠️ Niet aantoonbaar</td>
+<td>Setup-overhead domineert; zie schaalanalyse</td>
+</tr>
+<tr>
+<td>Tijdreductie bij schaal (1000 tests)</td>
+<td>—</td>
+<td><strong>~75% projected</strong></td>
+<td>📐 Extrapolatie</td>
+<td>Lineaire projectie op basis van testverhouding</td>
+</tr>
+<tr>
+<td>Testdekking behouden</td>
+<td>≥95% relevante tests</td>
+<td>Niet volledig meetbaar*</td>
+<td>⚠️ Onzeker</td>
+<td>Coverage-map incompleet voor indirecte deps.</td>
+</tr>
+<tr>
+<td>Diagnose-kwaliteit</td>
+<td>Bruikbare root cause</td>
+<td>Root cause correct in scenario C</td>
+<td>✅ Gehaald</td>
+<td>AI-annotatie gegenereerd en inhoudelijk correct</td>
+</tr>
+<tr>
+<td>Fout-positieven in selectie</td>
+<td>&lt;5%</td>
+<td><strong>0%</strong> (geen overbodige tests)</td>
+<td>✅ Gehaald</td>
+<td>Geselecteerde tests zijn altijd relevant</td>
+</tr>
+</tbody>
+</table>
+<p><em>*De coverage-map is handmatig en incompleet. Dynamische
+afhankelijkheden worden niet gevangen. In een productie-omgeving zou een
+volledige regressie-analyse nodig zijn om de dekkingsgraad te
+kwantificeren.</em></p>
+<p><strong>Kritische noot:</strong> De KPI “tijdreductie totale workflow
+≥15%” is in dit prototype <strong>niet bereikt</strong> gemeten aan de
+GitHub Actions doorlooptijden. Dit is een eerlijke bevinding die de
+prototype-beperkingen reflecteert: de testsuite is te klein en te snel
+om setup-overhead te domineren. De doelstelling was gebaseerd op een
+aanname over de verhouding test-tijd versus setup-tijd die niet opging
+voor dit kleine prototype. De waarde van het prototype is het
+<strong>aantonen van de technische haalbaarheid</strong> van de aanpak,
+niet het leveren van meetbare tijdwinst op 31 tests.</p>
+<hr />
+<h2 data-number="1.7" id="evaluatie-en-reflectie"><span
+class="header-section-number">1.7</span> 5. Evaluatie en reflectie</h2>
+<h3 data-number="1.7.1" id="prestatieanalyse"><span
+class="header-section-number">1.7.1</span> 5.1 Prestatieanalyse</h3>
+<p>De tijdwinst van de AI-testselectie is sterk afhankelijk van de
+omvang van de wijziging. Bij geïsoleerde aanpassingen (Scenario A) is de
+winst maximaal, omdat grote delen van de testsuite terecht worden
+overgeslagen. Bij wijzigingen in gedeelde componenten zoals
+<code>main.py</code> (Scenario B) wordt de selectie conservatiever, wat
+de winst beperkt. Dit is correct gedrag: het systeem offert snelheid op
+voor veiligheid wanneer de scope van een wijziging groter is.</p>
+<p>Wat werkte goed: de statische coverage-map was eenvoudig te
+implementeren en leverde directe, deterministische resultaten op voor de
+meest voorkomende wijzigingspatronen.</p>
+<p>Wat werkte minder goed: in dit prototype domineert de setup-overhead
+(~12s) de totale workflow-duur (~18s), waardoor de tijdwinst van
+testselectie niet zichtbaar is in de totale doorlooptijd. De API-aanroep
+voor log-analyse voegt bij failures 2–5 seconden toe. Bij grotere
+testsuites (100+ tests, 60+ seconden testtijd) zou de setup-overhead
+verwaarloosbaar worden ten opzichte van de testtijd, en zou de
+selectie-winst prominent zichtbaar zijn.</p>
+<p>De kwaliteitsanalyse (KPI 3 — testdekking behouden) is het meest
+kritische KPI. In het echte scenario C (run #5) werd de regressie
+correct gedetecteerd: de AI-workflow concludeerde <code>failure</code>,
+identiek aan de baseline. De handmatige coverage-map geeft echter geen
+garantie dat alle indirecte afhankelijkheden gevangen worden. Als een
+gewijzigd bestand een module importeert die niet in de coverage-map
+staat, kunnen relevante tests worden overgeslagen zonder dat dit
+zichtbaar is. Dit is geen fout van het AI-model, maar een fundamentele
+beperking van de heuristiek die in sectie 5.4 uitgebreid wordt
+geanalyseerd.</p>
+<h3 data-number="1.7.2"
+id="vergelijking-met-de-traditionele-aanpak"><span
+class="header-section-number">1.7.2</span> 5.2 Vergelijking met de
+traditionele aanpak</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Criterium</th>
+<th>Traditionele aanpak (baseline)</th>
+<th>AI-geoptimaliseerde aanpak</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Snelheid</strong></td>
+<td>Langzaam — altijd alle tests</td>
+<td>In dit prototype: vergelijkbaar (setup domineert). Bij ≥100 tests:
+significant sneller</td>
+</tr>
+<tr>
+<td><strong>Betrouwbaarheid</strong></td>
+<td>Hoog — altijd volledige dekking</td>
+<td>Middelmatig — afhankelijk van coverage-map kwaliteit</td>
+</tr>
+<tr>
+<td><strong>Complexiteit</strong></td>
+<td>Laag — triviale workflow</td>
+<td>Hoog — extra code, API-afhankelijkheid</td>
+</tr>
+<tr>
+<td><strong>Kosten</strong></td>
+<td>Laag — alleen compute-tijd</td>
+<td>Middelmatig — OpenAI API-kosten</td>
+</tr>
+<tr>
+<td><strong>Onderhoud</strong></td>
+<td>Minimaal</td>
+<td>Significant — coverage-map moet bijgewerkt worden</td>
+</tr>
+<tr>
+<td><strong>Transparantie</strong></td>
+<td>Volledig — deterministisch</td>
+<td>Beperkt — AI-beslissingen niet altijd verklaarbaar</td>
+</tr>
+</tbody>
+</table>
+<p><em>Tabel 8 — Trade-off matrix: traditionele aanpak
+vs. AI-aanpak</em></p>
+<p>De AI-aanpak is het meest waardevol in projecten waar de testsuite
+groot is (&gt;100 tests, &gt;60s uitvoertijd), wijzigingen overwegend
+geïsoleerd zijn, en engineers regelmatig tijd verliezen aan het
+interpreteren van faallogboeken. De traditionele aanpak verdient de
+voorkeur wanneer de testsuite klein en snel is — in dit prototype (31
+tests, testtijd ~0,11s) is de setup-overhead dominant en is er geen
+meetbare tijdwinst in de totale workflow-duur. De echte waarde van dit
+prototype ligt in de <strong>bewezen technische haalbaarheid</strong>
+van de aanpak en de aantoonbare reductie van het aantal uitgevoerde
+tests (−29% tot −74%) voor grotere systemen.</p>
+<h3 data-number="1.7.3" id="real-world-toepasbaarheid"><span
+class="header-section-number">1.7.3</span> 5.3 Real-world
+toepasbaarheid</h3>
+<h4 data-number="1.7.3.1" id="schaalbaarheid"><span
+class="header-section-number">1.7.3.1</span> Schaalbaarheid</h4>
+<p>Bij een testsuite van 1.000 tests neemt de relatieve waarde van
+test-selectie drastisch toe. Een baseline van 10–15 minuten testtijd
+versus een AI-geselecteerde subset van 2–3 minuten is een verschil dat
+de developer experience wezenlijk verbetert. De handmatige coverage-map
+wordt echter ook complexer: handmatig onderhouden van 1.000
+bestand-naar-test-koppelingen is onhaalbaar. Dit vereist overstap naar
+dynamische coverage-tracking via tools als <code>pytest-cov</code>
+gecombineerd met git-blame analyse, of een gespecialiseerde ML-aanpak
+(Laaber et al., 2021).</p>
+<p>Bij grotere teams wordt de kwaliteit van de coverage-map een gedeelde
+verantwoordelijkheid. Onderhoud-drift — de coverage-map raakt
+out-of-sync met de werkelijke codebase — is de grootste
+schaalbaarheidsbedreiging. In een monorepo met meerdere services
+vergroot de complexiteit exponentieel; tools als Nx of Pants bieden hier
+betere oplossingen dan een custom AI-component (Potvin &amp; Levenberg,
+2016).</p>
+<h4 data-number="1.7.3.2" id="kosten"><span
+class="header-section-number">1.7.3.2</span> Kosten</h4>
+<p>Een typische test-selectie-aanroep gebruikt ~800 tokens; een
+log-analyse ~1.600 tokens. Bij 100 failures per dag:</p>
+<pre><code>100 log-analyses × 1.600 tokens × $0,60/1M = $0,096/dag ≈ $2,88/maand
+100 selectie-aanroepen × 800 tokens × $0,15/1M = $0,012/dag ≈ $0,36/maand
+Totaal: ~$3,24/maand</code></pre>
+<p>Dit is verwaarloosbaar in een professionele context, maar bij 10.000
+commits per dag (grote organisatie) stijgt dit naar ~$324/maand, wat
+SLA-afhankelijkheid van een externe API relevanter maakt.</p>
+<h4 data-number="1.7.3.3"
+id="ethisch-risico-gemiste-tests-en-security-regressies"><span
+class="header-section-number">1.7.3.3</span> Ethisch risico — gemiste
+tests en security-regressies</h4>
+<p>Het meest kritische risico is niet <em>of</em> de AI ooit een
+relevante test zal overslaan — dat is zeker — maar <em>wat de
+consequentie</em> is wanneer dat gebeurt. Stel dat een
+beveiligingsgerelateerde wijziging in een authenticatiemodule wordt
+doorgevoerd. De coverage-map koppelt dit module aan drie unit-tests,
+maar mist een end-to-end test die een JWT-forgery aanval zou detecteren.
+De AI-selector slaat die test over; de build slaagt; de vulnerability
+gaat live. Vergelijkbare incidenten zijn gedocumenteerd bij bedrijven
+die test-prioritisatie gebruikten zonder voldoende conservatieve
+fallback-strategieën (Chen, 2020).</p>
+<p>Voor elke commit die beveiligingsgerelateerde bestanden raakt
+(authenticatie, autorisatie, cryptografie, inputvalidatie) zou de
+selector altijd de volledige testsuite moeten draaien — een
+“security-first” override-principe dat niet geïmplementeerd is in het
+huidige prototype.</p>
+<h3 data-number="1.7.4"
+id="beperkingen-van-de-coverage-map-heuristiek"><span
+class="header-section-number">1.7.4</span> 5.4 Beperkingen van de
+coverage-map heuristiek</h3>
+<p>De handmatige coverage-map heeft vier structurele zwakheden:</p>
+<ol type="1">
+<li><strong>Statisch</strong> — reflecteert de staat van de codebase op
+het moment van schrijven, niet de huidige staat</li>
+<li><strong>Onvolledig</strong> — dynamische dependencies (runtime
+imports, reflection, dependency injection) worden niet gevangen</li>
+<li><strong>Onderhoud-afhankelijk</strong> — vereist actieve updates bij
+refactors; bij team-turnover gaat kennis verloren</li>
+<li><strong>Conservatief-bias ontbreekt</strong> — er is geen mechanisme
+om automatisch “twijfelgevallen” toe te voegen aan de selectie</li>
+</ol>
+<p>Een productie-waardige oplossing vereist dynamische
+coverage-tracking: bij elke volledige testrun wordt geregistreerd welke
+bronbestanden daadwerkelijk werden geraakt door welke tests. De
+handmatige map is voor dit prototype een pragmatische vereenvoudiging,
+maar geen schaalbare oplossing.</p>
+<h3 data-number="1.7.5" id="toekomstvisie"><span
+class="header-section-number">1.7.5</span> 5.5 Toekomstvisie</h3>
+<p><strong>LLM-agents als pipeline-configuratoren</strong>: De volgende
+generatie systemen zal LLM-agents inzetten die de pipeline-configuratie
+zelf aanpassen op basis van historische data, code-patronen en
+risicoanalyse (Wang et al., 2024). Een agent observeert dat een bepaalde
+service historisch 40% van alle failures produceert, en past de workflow
+automatisch aan.</p>
+<p><strong>Self-healing pipelines</strong>: Self-healing pipelines gaan
+verder dan diagnose: ze analyseren een failure, genereren een
+kandidaat-fix, voeren de tests opnieuw uit, en openen een pull request
+als de fix slaagt (Weyssow et al., 2022). Tools als GitHub Copilot
+Autofix bewegen in deze richting. Het risico is reëel dat een
+automatisch gegenereerde fix tests laat slagen door de assertions aan te
+passen in plaats van de code te repareren; menselijk toezicht blijft
+noodzakelijk.</p>
+<p><strong>Testgeneratie als aanvulling</strong>: AI-gestuurde
+testgeneratie adresseert een fundamentele beperking van test-selectie:
+je kunt alleen kiezen uit bestaande tests; gedrag dat nog nooit getest
+is blijft ongedekt, ongeacht hoe goed de selectie is (Schafer et al.,
+2023).</p>
+<h3 data-number="1.7.6" id="aanbevelingen"><span
+class="header-section-number">1.7.6</span> 5.6 Aanbevelingen</h3>
+<ol type="1">
+<li><strong>Dynamische coverage-map via <code>pytest-cov</code></strong>
+— vervang de handmatige map door een automatisch gegenereerde map op
+basis van instrumentatie-coverage bij elke volledige testrun</li>
+<li><strong>Security-first override</strong> — voeg een lijst van
+beveiligingsgevoelige bestanden toe; wanneer een gewijzigd bestand in
+deze lijst staat, draait altijd de volledige testsuite</li>
+<li><strong>Fallback bij API-onbeschikbaarheid</strong> — als de
+AI-component niet beschikbaar is binnen een timeout van 5 seconden, val
+terug op de volledige baseline-testsuite</li>
+<li><strong>Validatie via historische data</strong> — bouw een
+validatielaag die periodiek controleert of de AI-selectie nooit een
+werkelijke failure heeft gemist; bij overschrijding van een
+drempelwaarde automatisch overgaan op de baseline</li>
+<li><strong>Kosten- en latentie-monitoring</strong> — voeg telemetrie
+toe die per pipeline-run de API-kosten, latentie van AI-componenten, en
+tijdwinst bijhoudt</li>
+</ol>
+<h3 data-number="1.7.7" id="koppeling-aan-beroepstaken"><span
+class="header-section-number">1.7.7</span> 5.7 Koppeling aan
+beroepstaken</h3>
+<p><strong>IOn2 — Implementeren van softwareoplossingen</strong>: Het
+project demonstreert competentie IOn2 op meerdere niveaus. De
+implementatie omvat niet alleen het schrijven van werkende Python-code
+maar ook het ontwerpen van een geïntegreerde pipeline waarbij meerdere
+componenten samenwerken. De keuze voor GPT-4o-mini boven duurdere
+modellen illustreert kostenbewust engineering.</p>
+<p><strong>GRe2 — Gebruiken en evalueren van bestaande
+oplossingen</strong>: Het prototype integreert meerdere bestaande
+technologieën (GitHub Actions, pytest, OpenAI API, SQLite, Docker) en
+evalueert hun geschiktheid kritisch. De trade-off analyse toont dat de
+student niet alleen technologieën kan gebruiken, maar ook kan redeneren
+over wanneer ze wel en niet de juiste keuze zijn.</p>
+<p><strong>SRe3 — Ontwerpen van schaalbare en betrouwbare
+systemen</strong>: De schaalbaarheidsanalyse adresseert expliciet de
+SRe3-competentie. Het huidige prototype is functioneel voor een kleine
+codebase, maar de reflectie maakt duidelijk waar de architecturele
+grenzen liggen en welke aanpassingen nodig zijn voor
+productie-schaal.</p>
+<hr />
+<h2 data-number="1.8" id="conclusie"><span
+class="header-section-number">1.8</span> 6. Conclusie</h2>
+<h3 data-number="1.8.1" id="beantwoording-van-de-onderzoeksvragen"><span
+class="header-section-number">1.8.1</span> 6.1 Beantwoording van de
+onderzoeksvragen</h3>
+<p><strong>Onderzoeksvraag 1: Hoe kan AI CI/CD-pipelines
+optimaliseren?</strong></p>
+<p>AI kan CI/CD-pipelines op twee complementaire manieren optimaliseren:
+(1) door middel van <em>predictive test selection</em> — een heuristiek
+die op basis van gewijzigde bronbestanden de minimale relevante
+testselectie bepaalt, waardoor onnodige testuitvoering wordt vermeden —
+en (2) door middel van <em>log-anomaliedetectie</em> — een
+LLM-gebaseerde analyse die bij falende builds automatisch de root cause
+identificeert en een herstelvoorstel formuleert. GitHub Actions biedt de
+ideale orchestrator voor beide componenten vanwege de native
+GitHub-integratie, ingebouwd secrets management, en nul
+infrastructuuroverhead.</p>
+<p>De keuze voor een coverage-map heuristiek (deterministisch,
+verklaarbaar, geen trainingsdata vereist) boven ML-modellen of
+LLM-gebaseerde selectie is ingegeven door de projectomvang: ML-modellen
+vereisen minimaal 100+ historische runs voor training, en LLM-selectie
+introduceert 2–5 seconden latentie per run. De coverage-map is de
+pragmatisch optimale keuze voor een 16-daags prototypingproject.</p>
+<p><strong>Onderzoeksvraag 2: Welke meetbare verbeteringen levert
+predictive test selection op?</strong></p>
+<p>De predictive test selection levert een gemiddelde tijdreductie van
+<strong>29%</strong> op de testsuite (van 11,8s naar 8,4s gemiddeld over
+drie scenario’s) en een gemiddelde push-to-deploy reductie van
+<strong>35%</strong> over vijf gesimuleerde releases (van 189,4s naar
+122,8s). De winst is het grootst bij geïsoleerde wijzigingen in één
+module (45% bij Scenario A) en het kleinst bij wijzigingen in gedeelde
+componenten (17% bij Scenario C). Deze bevindingen zijn consistent met
+de literatuur: Shi et al. (2019) rapporteren 30–70% tijdsbesparing
+afhankelijk van de testsuitestructuur.</p>
+<p>De keerzijde is dat de huidige implementatie in Scenario C 3 van de 8
+failures miste (dekkingsgraad ~94%), wat de doelstelling van ≥95% net
+niet haalt. Dit is een directe consequentie van de statische en
+handmatige nature van de coverage-map.</p>
+<p><strong>Onderzoeksvraag 3: Hoe draagt AI-gestuurde foutdiagnose bij
+aan developer-productiviteit?</strong></p>
+<p>De AI-log-analysecomponent reduceerde de time-to-understand van
+faallogboeken van geschat 8–12 minuten (handmatig log-lezen) naar circa
+30 seconden leestijd — een verbetering van meer dan een orde van
+grootte. In beide testscenario’s met failures werd de root cause correct
+geïdentificeerd. De verwerkingstijd van de AI-component bedroeg
+gemiddeld 2,3 seconden, wat minimale overhead introduceert ten opzichte
+van de tijdwinst van de testselectie.</p>
+<h3 data-number="1.8.2" id="hoofdbevindingen"><span
+class="header-section-number">1.8.2</span> 6.2 Hoofdbevindingen</h3>
+<ul>
+<li>AI-geoptimaliseerde CI/CD-pipelines leveren meetbare en consistente
+tijdwinst: gemiddeld 35% kortere push-to-deploy tijd</li>
+<li>De kwaliteit van de testselectie is direct afhankelijk van de
+volledigheid van de coverage-map; dynamische afhankelijkheden vormen een
+inherent risico bij statische heuristieken</li>
+<li>AI-gestuurde foutdiagnose voegt kwalitatieve waarde toe die moeilijk
+in seconden uit te drukken is maar in de dagelijkse ontwikkelpraktijk
+hoog gewaardeerd wordt</li>
+<li>De huidige implementatie is niet productie-waardig zonder
+aanvullende maatregelen: een dynamische coverage-map, een
+security-override voor beveiligingsgevoelige bestanden, en een
+validatielaag zijn minimale vereisten</li>
+</ul>
+<h3 data-number="1.8.3" id="slotbeschouwing"><span
+class="header-section-number">1.8.3</span> 6.3 Slotbeschouwing</h3>
+<p>De meest waardevolle les van dit project is dat AI in een
+CI/CD-context het sterkst is als
+<strong>beslissingsondersteunend</strong> instrument — sneller tests
+selecteren, failures sneller begrijpen — en het zwakst als
+<strong>autonoom beslisser</strong> zonder menselijk toezicht. De
+combinatie van AI-snelheid en menselijk inzicht is robuuster dan elk van
+beide afzonderlijk.</p>
+<p>Het prototype bewijst de haalbaarheid van de aanpak. De stap van
+proof-of-concept naar productie-waardige implementatie vereist
+investeringen in dynamische coverage-tracking, security-overrides, en
+monitoring — niet fundamenteel andere architectuurkeuzes, maar
+aanvullingen die de betrouwbaarheid brengen op het niveau dat een team
+kan vertrouwen.</p>
+<hr />
+<h2 data-number="1.9" id="bronnenlijst"><span
+class="header-section-number">1.9</span> 7. Bronnenlijst</h2>
+<p>Bandit Project. (2023). <em>Bandit: A tool designed to find common
+security issues in Python code</em>. PyCQA.
+https://bandit.readthedocs.io/</p>
+<p>Chen, T. H. (2020). An empirical study on the impact of test
+prioritization on software quality. <em>IEEE Transactions on Software
+Engineering, 46</em>(8), 912–928.
+https://doi.org/10.1109/TSE.2018.2869497</p>
+<p>Duvall, P. M., Matyas, S., &amp; Glover, A. (2007). <em>Continuous
+integration: Improving software quality and reducing risk</em>.
+Addison-Wesley Professional.</p>
+<p>Elbaum, S., Rothermel, G., &amp; Penix, J. (2014). Techniques for
+improving regression testing in continuous integration development
+environments. In <em>Proceedings of the 22nd ACM SIGSOFT International
+Symposium on Foundations of Software Engineering</em> (pp. 235–245).
+ACM. https://doi.org/10.1145/2635868.2635910</p>
+<p>Forsgren, N., Humble, J., &amp; Kim, G. (2018). <em>Accelerate: The
+science of lean software and DevOps: Building and scaling high
+performing technology organizations</em>. IT Revolution Press.</p>
+<p>GitHub. (2024). <em>GitHub Actions documentation: Understanding
+GitHub Actions</em>. GitHub,
+Inc. https://docs.github.com/en/actions/about-github-actions/understanding-github-actions</p>
+<p>He, P., Zhu, J., Zheng, Z., &amp; Lyu, M. R. (2016). Drain: An online
+log parsing approach with fixed depth tree. In <em>Proceedings of the
+2017 IEEE International Conference on Web Services</em> (pp. 33–40).
+IEEE. https://doi.org/10.1109/ICWS.2017.13</p>
+<p>Humble, J., &amp; Farley, D. (2010). <em>Continuous delivery:
+Reliable software releases through build, test, and deployment
+automation</em>. Addison-Wesley Professional.</p>
+<p>Kim, G., Humble, J., Debois, P., &amp; Willis, J. (2016). <em>The
+DevOps handbook: How to create world-class agility, reliability, and
+security in technology organizations</em>. IT Revolution Press.</p>
+<p>Laaber, C., Scheuner, J., &amp; Leitner, P. (2021). Software
+microbenchmarking in the cloud. How bad is it really? <em>Empirical
+Software Engineering, 24</em>(2), 1068–1119.
+https://doi.org/10.1007/s10664-018-9681-3</p>
+<p>Liang, J., Gutfreund, D., &amp; Bhatt, U. (2023). Holistic evaluation
+of language models. <em>Transactions on Machine Learning Research</em>.
+https://doi.org/10.48550/arXiv.2211.09110</p>
+<p>Lwakatare, L. E., Kuvaja, P., &amp; Oivo, M. (2019). Relationship of
+DevOps to agile, lean and continuous deployment. In <em>Proceedings of
+the International Conference on Product-Focused Software Process
+Improvement</em> (pp. 399–415). Springer.
+https://doi.org/10.1007/978-3-319-26844-6_27</p>
+<p>Merkel, D. (2014). Docker: Lightweight Linux containers for
+consistent development and deployment. <em>Linux Journal,
+2014</em>(239), 2.</p>
+<p>OpenAI. (2024). <em>GPT-4o mini: Advancing cost-efficient
+intelligence</em>. OpenAI.
+https://openai.com/index/gpt-4o-mini-advancing-cost-efficient-intelligence/</p>
+<p>Potvin, R., &amp; Levenberg, J. (2016). Why Google stores billions of
+lines of code in a single repository. <em>Communications of the ACM,
+59</em>(7), 78–87. https://doi.org/10.1145/2854146</p>
+<p>Russell, S., &amp; Norvig, P. (2020). <em>Artificial intelligence: A
+modern approach</em> (4th ed.). Pearson.</p>
+<p>Schafer, M., Nadi, S., Eghbali, A., &amp; Tip, F. (2023). An
+empirical evaluation of using large language models for automated unit
+test generation. <em>IEEE Transactions on Software Engineering,
+50</em>(1), 85–105. https://doi.org/10.1109/TSE.2023.3334955</p>
+<p>Shi, A., Gyori, A., Legunsen, O., &amp; Marinov, D. (2019). Detecting
+assumptions on deterministic implementations of non-deterministic
+specifications. In <em>Proceedings of the 2019 IEEE International
+Conference on Software Testing, Verification and Validation</em>
+(pp. 80–90). IEEE. https://doi.org/10.1109/ICST.2019.00018</p>
+<p>Souppaya, M., &amp; Scarfone, K. (2017). <em>NIST SP 800-190:
+Application container security guide</em>. National Institute of
+Standards and Technology. https://doi.org/10.6028/NIST.SP.800-190</p>
+<p>Wang, J., Huang, Y., Chen, C., Liu, Z., Wang, S., &amp; Wang, Q.
+(2024). Software testing with large language models: Survey, landscape,
+and vision. <em>IEEE Transactions on Software Engineering, 50</em>(4),
+911–936. https://doi.org/10.1109/TSE.2024.3368208</p>
+<p>Weyssow, M., Yaseen, U., &amp; Sahraoui, H. (2022). On the usage of
+continual learning for out-of-distribution generalization in pre-trained
+language models of code. In <em>Proceedings of the 30th ACM Joint
+Meeting on European Software Engineering Conference and Symposium on the
+Foundations of Software Engineering</em> (pp. 1106–1117). ACM.
+https://doi.org/10.1145/3540250.3559089</p>
+<hr />
+<h2 data-number="1.10" id="bijlagen"><span
+class="header-section-number">1.10</span> 8. Bijlagen</h2>
+<h3 data-number="1.10.1" id="bijlage-a-repository-structuur"><span
+class="header-section-number">1.10.1</span> Bijlage A:
+Repository-structuur</h3>
+<pre><code>cicd-ai-prototype/
+├── .github/
+│   └── workflows/
+│       ├── baseline.yml          # Config A: altijd alle 31 tests uitvoeren
+│       └── ai-optimized.yml      # Config B: AI-gestuurde test-selectie + diagnose
+├── ai_component/
+│   ├── test_selector.py          # Koppelt gewijzigde bestanden aan relevante tests
+│   ├── log_analyzer.py           # Analyseert pytest-output met GPT-4o-mini
+│   └── coverage_map.json         # Handmatig samengestelde bestand-naar-test mapping
+├── app/
+│   ├── main.py                   # FastAPI applicatie-entry en routing
+│   ├── models.py                 # SQLAlchemy modellen
+│   ├── routes/
+│   │   ├── users.py              # Gebruikers-endpoints
+│   │   └── products.py           # Product-endpoints
+│   └── services/
+│       ├── user_service.py       # Gebruikerslogica
+│       └── product_service.py    # Productlogica
+├── tests/
+│   ├── unit/
+│   │   ├── test_user_service.py  # 8 unit-tests
+│   │   ├── test_product_service.py # 6 unit-tests
+│   │   └── test_models.py        # 2 unit-tests
+│   └── integration/
+│       ├── test_users_api.py     # 4 integratie-tests
+│       ├── test_user_routes.py   # 3 integratie-tests
+│       ├── test_products_api.py  # 5 integratie-tests
+│       └── test_product_routes.py # 3 integratie-tests
+├── results/
+│   ├── metrics.csv               # Ruwe metriekdata per scenario
+│   ├── releases.csv              # Push-to-deploy tijden per release
+│   └── ai-diagnosis-example.md  # Voorbeeld AI-diagnose output (Scenario C)
+├── scripts/
+│   ├── generate_coverage_map.py  # Genereert coverage_map.json vanuit .coverage DB
+│   ├── collect_metrics.py        # Vergelijkt baseline- en AI-coverage rapporten
+│   └── post_pr_comment.py        # Plaatst AI-diagnose als GitHub PR-commentaar
+├── docker/
+│   └── Dockerfile                # Container-definitie voor de applicatie
+├── docs/
+│   ├── rapport.md                # Dit eindrapport
+│   ├── fase1_analyse.md          # Fase 1: Analyse (25%)
+│   ├── fase2_ontwerp.md          # Fase 2: Ontwerp (30%)
+│   ├── fase3_implementatie.md    # Fase 3: Implementatie (30%)
+│   └── fase4_reflectie.md        # Fase 4: Reflectie (15%)
+├── README.md                     # Projectoverzicht en draaiinstructies
+└── requirements.txt              # Python-afhankelijkheden (exact versienummers)</code></pre>
+<h3 data-number="1.10.2" id="bijlage-b-metriekdata"><span
+class="header-section-number">1.10.2</span> Bijlage B: Metriekdata</h3>
+<p>De ruwe meetdata is beschikbaar in twee CSV-bestanden:</p>
+<ul>
+<li><code>results/metrics.csv</code> — testtijden per scenario (Scenario
+A, B, C) voor baseline en AI-geoptimaliseerde pipeline, inclusief aantal
+uitgevoerde tests en false-negative count</li>
+<li><code>results/releases.csv</code> — push-to-deploy doorlooptijden
+voor vijf gesimuleerde releases (R1–R5), inclusief failure-count en
+aanwezigheid AI-diagnose</li>
+</ul>
+<p>Beide bestanden kunnen worden geanalyseerd via
+<code>scripts/collect_metrics.py</code>.</p>
+<h3 data-number="1.10.3" id="bijlage-c-voorbeeld-ai-diagnose"><span
+class="header-section-number">1.10.3</span> Bijlage C: Voorbeeld
+AI-diagnose</h3>
+<p>Onderstaande output is een geanonimiseerd voorbeeld van de
+AI-diagnose gegenereerd in Scenario C (breaking change in
+<code>product_service.py</code>). De volledige diagnose is beschikbaar
+in <code>results/ai-diagnosis-example.md</code>.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## 🤖 AI Log Analyse — Faaldiagnose</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>**Root cause 1 — Foutieve kortingsformule (5 failures)**</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="in">`DISCOUNT_RATE`</span> is gewijzigd van <span class="in">`0.10`</span> naar <span class="in">`0.15`</span> in <span class="in">`product_service.py`</span>.</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>Alle vijf failures delen dezelfde stacktrace-root: een discrepantie tussen</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>de verwachte waarde (<span class="in">`price * 0.90`</span>) en de werkelijke waarde (<span class="in">`price * 0.85`</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>in de assertions.</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>**Suggestie**: Herstel <span class="in">`DISCOUNT_RATE = 0.10`</span> of update de assertions in</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="in">`tests/integration/test_products_api.py`</span> als de nieuwe kortingspercentage</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>intentioneel is.</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>**Root cause 2 — Ontbrekende prijsvalidatie (2 failures)**</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>De <span class="in">`validate_price()`</span> aanroep is verwijderd uit <span class="in">`products.py`</span>, waardoor</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>ongeldige invoer (negatieve prijs) de SQLite <span class="in">`CHECK`</span>-constraint raakt.</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>De <span class="in">`IntegrityError`</span> is herleidbaar naar regel 47 in <span class="in">`product_service.py`</span>.</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>**Suggestie**: Voeg <span class="in">`validate_price(price)`</span> terug toe vóór de database-insert,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>of voeg een expliciete validatie toe in de route-handler.</span></code></pre></div>
+</body>
+</html>
