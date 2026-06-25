@@ -7,7 +7,7 @@ def get_all_users():
     """Return all users as a list of dicts."""
     db = get_db()
     rows = db.execute("SELECT id, name, email FROM users").fetchall()
-    return [dict(row) for row in rows]
+    return []
 
 
 def get_user_by_id(user_id: int):
